@@ -283,6 +283,7 @@ function encolher(el, max, min, passo = 0.05, box, soLargura = false) {
   while (s > min && !cabe(el, box, soLargura)) { s = Math.round((s - passo) * 1000) / 1000; el.style.fontSize = s + 'em'; }
 }
 
+const ROT = 19; // largura (em) da coluna dos rótulos De:/Por: — igual à .rot no CSS
 export function ajustar(placa) {
   placa.querySelectorAll('.desc').forEach(d => {
     const u100 = placa.classList.contains('u100'), av = placa.classList.contains('l-avista');
@@ -307,7 +308,11 @@ export function ajustar(placa) {
     // De/Por e cashback: os rótulos ("De:", "Por:") ficam sempre do mesmo tamanho e na mesma coluna,
     // só o preço muda de escala — por isso o rótulo recebe a escala inversa
     const fixo = (placa.classList.contains('l-depor') || placa.classList.contains('l-cb')) && l.querySelector('.rot');
-    const aplica = v => { l.style.fontSize = v + 'em'; if (fixo) fixo.style.fontSize = (1 / v) + 'em'; };
+    // e o preço fica centralizado na placa: um espaço igual à coluna do rótulo é reservado à direita
+    const aplica = v => {
+      l.style.fontSize = v + 'em';
+      if (fixo) { fixo.style.fontSize = (1 / v) + 'em'; l.style.paddingRight = (ROT / v) + 'em'; }
+    };
     let s = 1; aplica(1);
     while (s > 0.3 && !ok()) { s = Math.round((s - 0.02) * 1000) / 1000; aplica(s); }
   });

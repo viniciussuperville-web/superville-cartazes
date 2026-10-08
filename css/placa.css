@@ -138,8 +138,9 @@
 .placa.modo-branco .conteudo, .placa.modo-branco .selo { visibility: hidden; }
 
 /* De/Por e cashback: rótulos e "R$" alinhados na mesma coluna (igual às artes do Canva) */
-.l-depor .linha, .l-cb .linha { justify-content: flex-start; padding-left: 1em; }
-.l-depor .rot, .l-cb .rot { width: 21em; margin-right: 0; }
+.l-depor .linha, .l-cb .linha { justify-content: flex-start; padding-left: 0; }
+.l-depor .rot, .l-cb .rot { width: 19em; margin-right: 0; }
+.l-depor .linha .preco, .l-cb .linha .preco { flex: 1 1 auto; justify-content: center; }
 .l-depor .preco .rs, .l-cb .preco .rs { margin-left: 0; }
 /* hortifruti (100g): descrição maior */
 .u100 .desc { max-height: 19em; margin-top: 1.6em; }
