@@ -119,6 +119,7 @@ async function iniciar(user) {
   LOJA = isAdm() ? (localStorage.getItem('sv-loja') && LOJAS.some(l => l.id === localStorage.getItem('sv-loja')) ? localStorage.getItem('sv-loja') : LOJAS[0]?.id) : PERFIL.loja;
   $('#topo-user').textContent = email;
   $('#btn-aba-adm').hidden = !isAdm();
+  $('#btn-branco').hidden = !isAdm(); // placas em branco (para a gráfica): só o administrador
   $('#sel-loja').hidden = !isAdm();
   atualizarTopoLoja();
   mostrar('app');
@@ -335,7 +336,7 @@ function lerForm() {
     qtd: parseInt($('#f-qtd').value) || 0, pague: parseInt($('#f-pague').value) || 0, pct: num($('#f-pct').value),
     embalagem: $('#f-emb').value, brindeCod: atual.brindeCod || '', brindeDesc: $('#f-brinde').value.trim().toUpperCase(),
     dataIni: $('#f-ini').value, dataFim: $('#f-fim').value, enquantoDurar: $('#f-estoque').checked,
-    proxVenc: $('#f-venc').checked, tamanho: $('#f-tamanho').value, semFundo: $('#f-semfundo').checked, precoVermelho: $('#f-vermelho').checked,
+    proxVenc: $('#f-venc').checked, tamanho: $('#f-tamanho').value, semFundo: true, precoVermelho: $('#f-vermelho').checked,
     kgDe: $('#f-unidade').value === '100G' && $('#f-kgde').dataset.manual ? num($('#f-kgde').value) : 0,
     kgPor: $('#f-unidade').value === '100G' && $('#f-kgpor').dataset.manual ? num($('#f-kgpor').value) : 0,
   };
@@ -384,10 +385,8 @@ function atualizarEditor() {
   clearTimeout(prevT);
   prevT = setTimeout(async () => { await fontesProntas; montar($('#preview'), o, { largura: '340px', modo: 'fundo' }); }, 60);
   // a prévia mostra sempre a placa completa; o aviso diz como ela sai na impressão
-  $('#prev-modo').className = 'prev-modo ' + (o.semFundo ? 'sem' : 'com');
-  $('#prev-modo').innerHTML = o.semFundo
-    ? '🖨 Na impressão sai <b>SEM FUNDO</b>: só os textos e preços, para a placa da gráfica.'
-    : '🖨 Na impressão sai a <b>placa completa</b>, com fundo colorido.';
+  $('#prev-modo').className = 'prev-modo sem';
+  $('#prev-modo').innerHTML = '🖨 Na impressão sai <b>SEM FUNDO</b>: só os textos e preços, para a placa da gráfica.';
 }
 
 function abrirEditor(o, duplicar = false) {
@@ -520,7 +519,7 @@ $('#btn-salvar').addEventListener('click', async () => { const o = await salvar(
 $('#btn-salvar-imp').addEventListener('click', async () => {
   const o = await salvar(); if (!o) return;
   depoisDeSalvar(o);
-  const modo = o.semFundo ? 'semfundo' : 'fundo';
+  const modo = 'semfundo'; // regra: impressão na loja é sempre sem fundo
   await criarLote([o], o.tamanho, modo, '');
   await imprimir([o], o.tamanho, modo);
 });
@@ -530,7 +529,7 @@ function abrirImpressao(ctx) {
   impCtx = ctx;
   const branco = ctx.tipo === 'branco', lote = ctx.tipo === 'lote';
   $('#w-imp-modelo').hidden = !branco; $('#w-imp-copias').hidden = !branco;
-  $('#w-imp-modo').hidden = branco; $('#w-imp-nome').hidden = branco || lote;
+  $('#w-imp-modo').hidden = true; // impressão sempre sem fundo $('#w-imp-nome').hidden = branco || lote;
   $('#imp-nome').value = '';
   if (branco) {
     $('#imp-titulo').textContent = 'Placas em branco';
@@ -554,7 +553,7 @@ $('#btn-imp-ok').addEventListener('click', async () => {
     const base = { modelo: $('#imp-modelo').value, mecanica: '02', linhas: [] };
     return imprimir(Array.from({ length: n }, () => base), tam, 'branco');
   }
-  const modo = $('#imp-modo').value;
+  const modo = 'semfundo'; // regra: impressão sempre sem fundo
   if (impCtx.tipo === 'lote') return imprimir(impCtx.lote.itens, tam, modo);
   await criarLote(impCtx.itens, tam, modo, $('#imp-nome').value.trim());
   await imprimir(impCtx.itens, tam, modo);

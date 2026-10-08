@@ -200,7 +200,7 @@
           <div class="g2">
             <label>Tamanho da placa<select id="f-tamanho"></select></label>
             <div class="checks col">
-              <label class="chk"><input type="checkbox" id="f-semfundo"> Imprimir sem fundo (placa da gráfica)</label>
+              <label class="chk" hidden><input type="checkbox" id="f-semfundo" checked> Imprimir sem fundo (placa da gráfica)</label>
               <label class="chk"><input type="checkbox" id="f-manter"> Ao salvar, abrir nova placa com a mesma dinâmica</label>
             </div>
           </div>
@@ -231,7 +231,7 @@
     </select></label>
     <label id="w-imp-nome">Nome do lote (opcional)<input id="imp-nome" placeholder="Ex.: Tabloide semana 41"></label>
     <label id="w-imp-copias">Quantidade de placas<input type="number" id="imp-copias" min="1" value="4"></label>
-    <p class="dica">Na janela de impressão, use <b>Margens: Nenhuma</b> e marque <b>Gráficos de plano de fundo</b>.</p>
+    <p class="dica">A impressão sai <b>sem fundo</b> (só textos e preços), para a placa da gráfica. Na janela de impressão, use <b>Margens: Nenhuma</b>.</p>
     <div class="dlg-rodape">
       <button type="button" class="btn contorno" data-fechar>Cancelar</button>
       <button type="button" class="btn verde" id="btn-imp-ok">Imprimir</button>
