@@ -272,7 +272,8 @@ const fmtCampo = v => 'R$ ' + moeda(num(v) || 0);
     el.setSelectionRange(el.value.length, el.value.length);
     atualizarEditor();
   });
-  el.addEventListener('focus', () => setTimeout(() => el.setSelectionRange(el.value.length, el.value.length), 0));
+  // ao clicar, seleciona o valor: o que for digitado substitui o preço anterior
+  el.addEventListener('focus', () => el.select());
 });
 
 function preencher(o) {

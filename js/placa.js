@@ -168,8 +168,9 @@ function descHTML(o) {
   return `<div class="desc conteudo"><div class="fit">${ls.map(l => `<div class="ln">${esc(l.toUpperCase())}</div>`).join('')}${cada}</div></div>`;
 }
 
+// código de barras/interno não aparece mais na placa (decisão: placa limpa, igual às artes do Canva)
 function barrasHTML(o) {
-  if (!o.barras && !o.codigo) return '';
+  return '';
   return `<div class="cod conteudo">${o.barras ? `<svg class="bc" data-code="${esc(o.barras)}"></svg>` : ''}` +
     `<div class="codtxt">${esc(o.codigo || '')}</div></div>`;
 }
