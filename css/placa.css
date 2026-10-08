@@ -158,9 +158,12 @@
 /* De/Por: preço De menor, título menor e preço Por maior */
 .l-depor .cx-branca { flex-basis: 45em; }
 .u100.l-depor .cx-branca { flex-basis: 50em; }
-.l-depor .cx-branca .preco .int  { font-size: 14em; }
-.l-depor .cx-branca .preco .cent { font-size: 6.8em; }
-.l-depor .cx-branca .preco .un   { font-size: 3em; }
-.l-depor .cx-cor .preco.big .int  { font-size: 33em; }
-.l-depor .cx-cor .preco.big .cent { font-size: 15em; }
-.l-depor .cx-cor .preco.big .rs, .l-depor .cx-cor .preco.big .un { font-size: 4em; }
+.l-depor .cx-branca .preco .int  { font-size: 16em; }
+.l-depor .cx-branca .preco .cent { font-size: 7.6em; }
+.l-depor .cx-cor .preco.big .int  { font-size: 30em; }
+.l-depor .cx-cor .preco.big .cent { font-size: 14em; }
+.l-depor .cx-cor .preco.big .rs { font-size: 4em; }
+/* coluna da unidade (De/Por e cashback): mesma posição nas duas linhas */
+.placa .ucol { width: 17em; flex-shrink: 0; align-self: stretch; display: flex; align-items: flex-end; padding: 0 0 1.2em 1em; }
+.placa .ucol .un { font-weight: 300; font-size: 3.4em; line-height: 1; }
+.placa .ucol .un.b { font-weight: 700; }

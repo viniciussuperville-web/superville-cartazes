@@ -283,7 +283,6 @@ function encolher(el, max, min, passo = 0.05, box, soLargura = false) {
   while (s > min && !cabe(el, box, soLargura)) { s = Math.round((s - passo) * 1000) / 1000; el.style.fontSize = s + 'em'; }
 }
 
-const ROT = 19; // largura (em) da coluna dos rótulos De:/Por: — igual à .rot no CSS
 export function ajustar(placa) {
   placa.querySelectorAll('.desc').forEach(d => {
     const u100 = placa.classList.contains('u100'), av = placa.classList.contains('l-avista');
@@ -297,25 +296,40 @@ export function ajustar(placa) {
   placa.querySelectorAll('.rodape').forEach(t => encolher(t, t.classList.contains('bold') ? 3.1 : (placa.classList.contains('m-clube') && t.closest('.cx-cor') ? 2.6 : 2.9), 1.6, 0.05));
   placa.querySelectorAll('.chamada').forEach(t => encolher(t, 4, 2, 0.05, null, true));
   // a linha de preço por último: ocupa o espaço que sobrou
-  placa.querySelectorAll('.linha').forEach(l => {
+  // De/Por e cashback: 3 colunas — rótulo (De:/Por:) à esquerda, preço centralizado e unidade à direita.
+  // Rótulo e unidade têm tamanho e posição fixos (escala inversa), só o preço muda de tamanho, e os dois
+  // preços usam a mesma escala para ficarem proporcionais.
+  const colunas = placa.classList.contains('l-depor') || placa.classList.contains('l-cb');
+  const linhas = [...placa.querySelectorAll('.linha')];
+  const escalas = linhas.map(l => {
+    const rot = colunas && l.querySelector('.rot');
+    let ucol = colunas && l.querySelector('.ucol');
+    if (colunas && !ucol) {
+      ucol = document.createElement('div'); ucol.className = 'ucol';
+      const un = l.querySelector('.preco .un'); if (un) ucol.appendChild(un);
+      l.appendChild(ucol);
+    }
+    const aplica = v => {
+      l.style.fontSize = v + 'em';
+      if (rot) rot.style.fontSize = (1 / v) + 'em';
+      if (ucol) ucol.style.fontSize = (1 / v) + 'em';
+    };
     // mede pelos retângulos dos filhos (a fonte grande tem área interna maior que a linha visível)
     const ok = () => {
       const H = l.clientHeight, W = l.clientWidth;
-      let larg = 0, alt = 0;
-      for (const c of l.children) { const r = c.getBoundingClientRect(); larg += r.width; alt = Math.max(alt, r.height); }
+      let alt = 0;
+      for (const c of l.children) alt = Math.max(alt, c.getBoundingClientRect().height);
       return alt <= H + 1 && l.scrollWidth <= W + 1;
-    };
-    // De/Por e cashback: os rótulos ("De:", "Por:") ficam sempre do mesmo tamanho e na mesma coluna,
-    // só o preço muda de escala — por isso o rótulo recebe a escala inversa
-    const fixo = (placa.classList.contains('l-depor') || placa.classList.contains('l-cb')) && l.querySelector('.rot');
-    // e o preço fica centralizado na placa: um espaço igual à coluna do rótulo é reservado à direita
-    const aplica = v => {
-      l.style.fontSize = v + 'em';
-      if (fixo) { fixo.style.fontSize = (1 / v) + 'em'; l.style.paddingRight = (ROT / v) + 'em'; }
     };
     let s = 1; aplica(1);
     while (s > 0.3 && !ok()) { s = Math.round((s - 0.02) * 1000) / 1000; aplica(s); }
+    l._aplica = aplica;
+    return s;
   });
+  if (colunas && linhas.length > 1) {
+    const m = Math.min(...escalas);
+    linhas.forEach(l => l._aplica(m));
+  }
   placa.querySelectorAll('svg.bc').forEach(svg => {
     if (svg.dataset.ok || !window.JsBarcode) return;
     const code = svg.dataset.code;
