@@ -150,4 +150,6 @@
 .placa.modo-semfundo:not(.l-avista) .desc { margin-top: 3.5em; }
 
 /* opção: preço em vermelho */
-.placa.preco-vermelho .preco { color: #E30613; }
+/* só o valor (número e centavos) do preço "Por" / preço principal; R$ e unidade continuam pretos */
+.placa.preco-vermelho .cx-cor .preco .int, .placa.preco-vermelho .cx-cor .preco .cent,
+.placa.preco-vermelho.l-avista .preco .int, .placa.preco-vermelho.l-avista .preco .cent { color: #E30613; }
