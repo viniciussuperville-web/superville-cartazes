@@ -120,61 +120,89 @@
         <div class="calc" id="calc-info"></div>
       </div>
       <div class="editor-campos">
-        <div class="g2">
-          <label>Modelo<select id="f-modelo">
+        <section class="sec">
+          <h4><span class="n">1</span> Tipo de placa</h4>
+          <div class="modelos" id="modelos">
+            <button type="button" data-modelo="oferta"><i class="sw sw-oferta"></i><b>Oferta</b><small>Placa vermelha · PROMOÇÃO</small></button>
+            <button type="button" data-modelo="clube"><i class="sw sw-clube"></i><b>Clube Fidelidade</b><small>Placa preta · Sou Mais</small></button>
+            <button type="button" data-modelo="cashback"><i class="sw sw-cashback"></i><b>Cashback</b><small>Placa preta e verde</small></button>
+          </div>
+          <select id="f-modelo" hidden>
             <option value="oferta">Oferta</option><option value="clube">Clube Fidelidade</option><option value="cashback">Cashback</option>
-          </select></label>
-          <label id="w-mecanica">Dinâmica<select id="f-mecanica"></select></label>
-        </div>
+          </select>
+          <label id="w-mecanica">Dinâmica da promoção<select id="f-mecanica"></select></label>
+          <p class="dica destaque" id="mec-dica"></p>
+        </section>
 
-        <div class="busca-prod">
-          <label>Produto (código interno, código de barras ou descrição)
-            <div class="g-busca"><input id="f-busca" autocomplete="off" placeholder="Ex.: 31608, 7891234567890 ou café pilão">
-            <select id="f-setor"><option value="">Todos os setores</option></select></div>
-          </label>
-          <div class="sugestoes" id="sug-produto" hidden></div>
-          <div class="prod-sel" id="prod-sel"></div>
-        </div>
+        <section class="sec">
+          <h4><span class="n">2</span> Produto</h4>
+          <div class="busca-prod">
+            <label>Buscar por código interno, código de barras ou descrição
+              <div class="g-busca"><input id="f-busca" autocomplete="off" placeholder="Digite e aperte Enter. Ex.: 31608 ou café pilão">
+              <select id="f-setor"><option value="">Todos os setores</option></select></div>
+            </label>
+            <div class="sugestoes" id="sug-produto" hidden></div>
+            <div class="prod-sel" id="prod-sel"></div>
+          </div>
+          <p class="dica">Descrição que vai na placa (ajuste se precisar; ela fica salva para as próximas placas deste produto):</p>
+          <div class="g3">
+            <label>Linha 1 (tipo)<input id="f-l1"></label>
+            <label>Linha 2 (marca)<input id="f-l2"></label>
+            <label>Linha 3 (complemento)<input id="f-l3"></label>
+          </div>
+          <div class="g2">
+            <label>Unidade<select id="f-unidade"></select></label>
+            <label title="Usado para calcular o preço de referência (kg, litro, unidade)">Conteúdo da embalagem (para o preço de referência)<input id="f-conteudo" placeholder="Ex.: 250G, 1,35L, C/2UN"></label>
+          </div>
+        </section>
 
-        <div class="g3">
-          <label>Linha 1 (tipo)<input id="f-l1"></label>
-          <label>Linha 2 (marca)<input id="f-l2"></label>
-          <label>Linha 3 (complemento)<input id="f-l3"></label>
-        </div>
+        <section class="sec">
+          <h4><span class="n">3</span> Preços</h4>
+          <div class="g3">
+            <label id="w-de"><span id="lbl-de">Preço De</span><input id="f-de" inputmode="numeric" value="R$ 0,00"></label>
+            <label id="w-por"><span id="lbl-por">Preço Por</span><input id="f-por" inputmode="numeric" value="R$ 0,00"></label>
+            <label id="w-qtd"><span id="lbl-qtd">Quantidade</span><input id="f-qtd" type="number" min="1" step="1"></label>
+            <label id="w-pague">Pague<input id="f-pague" type="number" min="1" step="1"></label>
+            <label id="w-pct">% de desconto na última<input id="f-pct" inputmode="decimal" placeholder="50"></label>
+            <label id="w-emb">Embalagem<select id="f-emb"></select></label>
+            <label id="w-cashback">Valor do cashback<input id="f-cashback" inputmode="numeric" value="R$ 0,00"></label>
+          </div>
+          <div class="g3 kg-box" id="w-kg">
+            <label id="w-kgde"><span id="lbl-kgde">Preço do kg (De)</span><input id="f-kgde" inputmode="numeric" value="R$ 0,00"></label>
+            <label id="w-kgpor">Preço do kg (Por)<input id="f-kgpor" inputmode="numeric" value="R$ 0,00"></label>
+            <div class="kg-acao"><p class="dica">Calculado automaticamente (100g × 10). Pode alterar se precisar.</p>
+              <button type="button" class="link" id="btn-kg-recalc">Recalcular preço do kg</button></div>
+          </div>
+          <div class="busca-prod" id="w-brinde">
+            <label>Produto que o cliente leva (código ou descrição)
+              <input id="f-brinde-busca" autocomplete="off" placeholder="Buscar o produto que o cliente leva"></label>
+            <div class="sugestoes" id="sug-brinde" hidden></div>
+            <label>Descrição do brinde na placa<input id="f-brinde"></label>
+          </div>
+        </section>
 
-        <div class="g3">
-          <label>Unidade<select id="f-unidade"></select></label>
-          <label title="Usado para calcular o preço de referência (kg, litro, unidade)">Conteúdo (ref.)<input id="f-conteudo" placeholder="250G, 1,35L, C/2UN"></label>
-          <label id="w-de"><span id="lbl-de">Preço De</span><input id="f-de" inputmode="numeric" value="R$ 0,00"></label>
-        </div>
+        <section class="sec">
+          <h4><span class="n">4</span> Validade da oferta</h4>
+          <div class="g2">
+            <label>Data inicial<input type="date" id="f-ini"></label>
+            <label>Data final<input type="date" id="f-fim"></label>
+          </div>
+          <div class="checks">
+            <label class="chk"><input type="checkbox" id="f-estoque"> Oferta válida enquanto durarem os estoques</label>
+            <label class="chk"><input type="checkbox" id="f-venc"> Produto próximo do vencimento</label>
+          </div>
+        </section>
 
-        <div class="g3">
-          <label id="w-por"><span id="lbl-por">Preço Por</span><input id="f-por" inputmode="numeric" value="R$ 0,00"></label>
-          <label id="w-qtd"><span id="lbl-qtd">Quantidade</span><input id="f-qtd" type="number" min="1" step="1"></label>
-          <label id="w-pague">Pague<input id="f-pague" type="number" min="1" step="1"></label>
-          <label id="w-pct">% de desconto na última<input id="f-pct" inputmode="decimal" placeholder="50"></label>
-          <label id="w-emb">Embalagem<select id="f-emb"></select></label>
-          <label id="w-cashback">Valor do cashback<input id="f-cashback" inputmode="numeric" value="R$ 0,00"></label>
-        </div>
-
-        <div class="busca-prod" id="w-brinde">
-          <label>Produto que o cliente leva (código ou descrição)
-            <input id="f-brinde-busca" autocomplete="off" placeholder="Buscar brinde"></label>
-          <div class="sugestoes" id="sug-brinde" hidden></div>
-          <label>Descrição do brinde na placa<input id="f-brinde"></label>
-        </div>
-
-        <div class="g3">
-          <label>Data inicial<input type="date" id="f-ini"></label>
-          <label>Data final<input type="date" id="f-fim"></label>
-          <label>Tamanho para impressão<select id="f-tamanho"></select></label>
-        </div>
-        <div class="checks">
-          <label class="chk"><input type="checkbox" id="f-estoque"> Oferta válida enquanto durarem os estoques</label>
-          <label class="chk"><input type="checkbox" id="f-venc"> Produto próximo do vencimento</label>
-          <label class="chk"><input type="checkbox" id="f-semfundo"> Imprimir sem fundo (placa da gráfica)</label>
-          <label class="chk"><input type="checkbox" id="f-manter"> Manter dinâmica para novo preenchimento</label>
-        </div>
+        <section class="sec">
+          <h4><span class="n">5</span> Impressão</h4>
+          <div class="g2">
+            <label>Tamanho da placa<select id="f-tamanho"></select></label>
+            <div class="checks col">
+              <label class="chk"><input type="checkbox" id="f-semfundo"> Imprimir sem fundo (placa da gráfica)</label>
+              <label class="chk"><input type="checkbox" id="f-manter"> Ao salvar, abrir nova placa com a mesma dinâmica</label>
+            </div>
+          </div>
+        </section>
         <p class="msg" id="editor-msg"></p>
       </div>
     </div>

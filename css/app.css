@@ -142,3 +142,30 @@ label.chk input { width: auto; }
   .grade-adm { grid-template-columns: 1fr; }
   .g3 { grid-template-columns: 1fr 1fr; }
 }
+
+/* editor organizado por etapas */
+.dlg.grande label { font-size: 13px; font-weight: 700; color: #222; }
+.dlg.grande input, .dlg.grande select { font-size: 15px; padding: 10px 11px; }
+.sec { border: 1.5px solid var(--borda); border-radius: 12px; padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 12px; }
+.sec h4 { margin: 0; font-size: 17px; display: flex; align-items: center; gap: 10px; }
+.sec h4 .n { width: 28px; height: 28px; border-radius: 50%; background: var(--verde); color: #fff; display: grid; place-items: center; font-size: 15px; }
+.dica.destaque { background: var(--zebra); border-left: 4px solid var(--verde); padding: 8px 10px; border-radius: 6px; color: #333; font-size: 13px; }
+.dica.destaque:empty { display: none; }
+.modelos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.modelos button { background: #fff; border: 2px solid var(--borda); border-radius: 10px; padding: 10px; text-align: left; display: grid; grid-template-columns: 34px 1fr; grid-template-rows: auto auto; column-gap: 10px; align-items: center; }
+.modelos button b { font-size: 15px; } .modelos button small { color: var(--suave); font-size: 11px; grid-column: 2; }
+.modelos button .sw { grid-row: 1 / span 2; width: 34px; height: 42px; border-radius: 5px; }
+.modelos button.ativo { border-color: var(--verde); box-shadow: 0 0 0 3px rgba(59,176,114,.25); background: #F3FBF6; }
+.sw-oferta { background: linear-gradient(#E7110D 0 30%, #fff 30% 62%, #FEE502 62%); border: 3px solid #E7110D; }
+.sw-clube { background: linear-gradient(#000 0 30%, #fff 30% 62%, #FEE502 62%); border: 3px solid #000; }
+.sw-cashback { background: linear-gradient(#000 0 30%, #fff 30% 58%, #3BB87E 58%); border: 3px solid #000; }
+.kg-box { background: #F7F7F7; border-radius: 10px; padding: 10px; }
+.kg-acao { display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+.checks.col { grid-template-columns: 1fr; align-content: center; }
+.sugestoes { top: 66px; }
+.prod-sel.salva b.tag-salva { color: var(--verde-esc); }
+/* editor: topo e botões fixos, só o meio rola */
+.dlg.grande { overflow: hidden; }
+.dlg.grande > form { display: flex; flex-direction: column; max-height: 96vh; }
+.dlg.grande .editor-corpo { overflow: auto; flex: 1 1 auto; min-height: 0; padding: 2px 4px 4px 2px; }
+.dlg.grande .dlg-rodape { flex: 0 0 auto; }

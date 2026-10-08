@@ -263,10 +263,11 @@ CAMPOS.forEach(id => { const el = $('#' + id); el.addEventListener('input', atua
 const PADRAO = { modelo: 'oferta', mecanica: '02', unidade: 'UNIDADE', qtd: 2, pague: 1, pct: 50, embalagem: 'A CAIXA', tamanho: 'A4' };
 const fmtCampo = v => 'R$ ' + moeda(num(v) || 0);
 // campos de dinheiro: o encarregado digita só os números e a vírgula entra sozinha (399 → R$ 3,99)
-['f-de', 'f-por', 'f-cashback'].forEach(id => {
+['f-de', 'f-por', 'f-cashback', 'f-kgde', 'f-kgpor'].forEach(id => {
   const el = $('#' + id);
   el.setAttribute('inputmode', 'numeric');
   el.addEventListener('input', () => {
+    if (id === 'f-kgde' || id === 'f-kgpor') el.dataset.manual = '1';
     const d = el.value.replace(/\D/g, '').replace(/^0+/, '').slice(0, 9);
     el.value = 'R$ ' + moeda((parseInt(d || '0', 10)) / 100);
     el.setSelectionRange(el.value.length, el.value.length);
@@ -292,8 +293,32 @@ function preencher(o) {
   $('#f-tamanho').value = o.tamanho || 'A4';
   $('#f-estoque').checked = !!o.enquantoDurar; $('#f-venc').checked = !!o.proxVenc; $('#f-semfundo').checked = !!o.semFundo;
   $('#f-busca').value = ''; $('#sug-produto').hidden = true;
+  // preço do kg: guardado só quando foi alterado à mão
+  $('#f-kgde').value = fmtCampo(o.kgDe); $('#f-kgde').dataset.manual = o.kgDe ? '1' : '';
+  $('#f-kgpor').value = fmtCampo(o.kgPor); $('#f-kgpor').dataset.manual = o.kgPor ? '1' : '';
+  marcarModelo();
   mostrarProduto();
 }
+function marcarModelo() {
+  $$('#modelos button').forEach(b => b.classList.toggle('ativo', b.dataset.modelo === $('#f-modelo').value));
+}
+$$('#modelos button').forEach(b => b.addEventListener('click', () => {
+  $('#f-modelo').value = b.dataset.modelo; marcarModelo(); atualizarEditor();
+}));
+$('#btn-kg-recalc').addEventListener('click', () => {
+  $('#f-kgde').dataset.manual = ''; $('#f-kgpor').dataset.manual = ''; atualizarEditor();
+});
+const DICAS = {
+  '01': 'Preço único, sem "De" e "Por". A placa fica toda branca, com o preço grande.',
+  '02': 'Preço normal (De) e preço da promoção (Por). A economia é calculada sozinha.',
+  '03': 'Ex.: compre 3 e pague 2. O sistema calcula quanto sai cada unidade.',
+  '04': 'Ex.: na compra de 2 unidades, cada uma sai por R$ X.',
+  '05': 'Ex.: a partir de 3 unidades, cada uma sai por R$ X.',
+  '06': 'Ex.: compre 2 e pague a 2ª com 50% de desconto. O desconto é sempre na última unidade.',
+  '07': 'Na compra do produto, por + R$ 0,01 o cliente leva outro produto.',
+  '10': 'Mostra o preço da unidade e o total da embalagem (caixa, fardo, pack...).',
+  'cb': 'Mostra o preço regular e o valor do cashback que o cliente do Clube recebe.',
+};
 function mostrarProduto() {
   $('#prod-sel').innerHTML = atual.codigo || atual.barras
     ? `Produto: <b>${esc(atual.codigo)}</b> ${atual.barras ? '· ' + esc(atual.barras) : ''} ${atual.descBase ? '· ' + esc(atual.descBase) : ''}`
@@ -311,6 +336,8 @@ function lerForm() {
     embalagem: $('#f-emb').value, brindeCod: atual.brindeCod || '', brindeDesc: $('#f-brinde').value.trim().toUpperCase(),
     dataIni: $('#f-ini').value, dataFim: $('#f-fim').value, enquantoDurar: $('#f-estoque').checked,
     proxVenc: $('#f-venc').checked, tamanho: $('#f-tamanho').value, semFundo: $('#f-semfundo').checked,
+    kgDe: $('#f-unidade').value === '100G' && $('#f-kgde').dataset.manual ? num($('#f-kgde').value) : 0,
+    kgPor: $('#f-unidade').value === '100G' && $('#f-kgpor').dataset.manual ? num($('#f-kgpor').value) : 0,
   };
 }
 
@@ -328,7 +355,11 @@ function mostrarCampos(o) {
   $('#lbl-de').textContent = cb ? 'Preço regular' : ({ '01': 'Preço', '02': 'Preço De', '10': 'Preço da unidade' }[m] || 'Preço regular');
   $('#lbl-por').textContent = m === '02' ? 'Preço Por' : 'Preço promocional (por unidade)';
   $('#lbl-qtd').textContent = { '03': 'Compre', '04': 'Na compra de (unid.)', '05': 'A partir de (unid.)', '06': 'Compre (unid.)', '07': 'Na compra de (unid.)', '10': 'Unidades na embalagem' }[m] || 'Quantidade';
-  $('#f-semfundo').closest('label').hidden = false;
+  const temPromo = !cb && ['02', '03', '04', '05', '06'].includes(m);
+  vis('w-kg', o.unidade === '100G' && m !== '07' && m !== '10');
+  vis('w-kgpor', temPromo);
+  $('#lbl-kgde').textContent = temPromo ? 'Preço do kg (De / regular)' : 'Preço do kg';
+  $('#mec-dica').textContent = DICAS[cb ? 'cb' : m] || '';
 }
 
 let prevT;
@@ -336,13 +367,18 @@ function atualizarEditor() {
   const o = lerForm();
   mostrarCampos(o);
   const r = calcular(o);
+  // preço do kg automático (100g × 10), a não ser que tenha sido alterado à mão
+  if (o.unidade === '100G') {
+    if (!$('#f-kgde').dataset.manual) $('#f-kgde').value = fmtCampo(o.de * 10);
+    if (!$('#f-kgpor').dataset.manual) $('#f-kgpor').value = fmtCampo((r.promo || 0) * 10);
+  }
   const info = [];
   if (o.modelo !== 'cashback') {
     if (['03', '06'].includes(o.mecanica) && r.promo) info.push(`Preço por unidade na promoção: <b>R$ ${moeda(r.promo)}</b> (arredondado para baixo)`);
     if (r.economia) info.push(`Economia por unidade: <b>R$ ${moeda(r.economia)}</b>`);
     if (o.mecanica === '10' && r.total) info.push(`Total da embalagem: <b>R$ ${moeda(r.total)}</b>`);
   }
-  if (o.unidade === '100G' && o.de) info.push(`Preço do kg: <b>R$ ${moeda(o.de * 10)}</b>${r.promo ? ` → <b>R$ ${moeda(r.promo * 10)}</b>` : ''}`);
+  if (o.unidade === '100G' && o.de) info.push(`Preço do kg: <b>R$ ${moeda(o.kgDe || o.de * 10)}</b>${r.promo ? ` → <b>R$ ${moeda(o.kgPor || r.promo * 10)}</b>` : ''}`);
   if (r.erro) info.push(`<span style="color:#C62828"><b>Atenção:</b> ${esc(r.erro)}</span>`);
   $('#calc-info').innerHTML = info.join('<br>');
   clearTimeout(prevT);
@@ -394,13 +430,38 @@ function ligarBusca(inputId, boxId, setorId, aoEscolher) {
   inp.addEventListener('blur', () => setTimeout(() => box.hidden = true, 150));
   if (setorId) $('#' + setorId).addEventListener('change', procurar);
 }
-ligarBusca('f-busca', 'sug-produto', 'f-setor', p => {
+// descrições já ajustadas pelas lojas ficam salvas por código de produto (coleção "descricoes")
+const DESCS = new Map();
+async function descricaoSalva(codigo) {
+  if (!codigo) return null;
+  if (DESCS.has(codigo)) return DESCS.get(codigo);
+  try { const d = await getDoc(doc(db, 'descricoes', codigo)); const v = d.exists() ? d.data() : null; DESCS.set(codigo, v); return v; }
+  catch (e) { return null; }
+}
+async function guardarDescricao(o) {
+  if (!o.codigo || !o.linhas.some(Boolean)) return;
+  const salva = DESCS.get(o.codigo);
+  if (salva && JSON.stringify(salva.linhas) === JSON.stringify(o.linhas) && salva.conteudo === o.conteudo && salva.unidade === o.unidade) return;
+  const dados = { linhas: o.linhas, conteudo: o.conteudo, unidade: o.unidade, descBase: o.descBase || '', atualizadoEm: serverTimestamp(), atualizadoPor: PERFIL.email };
+  try { await setDoc(doc(db, 'descricoes', o.codigo), dados); DESCS.set(o.codigo, dados); }
+  catch (e) { console.warn('Descrição não salva:', e); }
+}
+ligarBusca('f-busca', 'sug-produto', 'f-setor', async p => {
   atual.codigo = p.c; atual.barras = p.b || ''; atual.descBase = p.d;
   const [a, b, c] = dividirLinhas(p.d);
   $('#f-l1').value = a; $('#f-l2').value = b; $('#f-l3').value = c;
   $('#f-conteudo').value = lerConteudo(p.d);
   mostrarProduto(); atualizarEditor();
   $('#f-de').focus();
+  const salva = await descricaoSalva(p.c);
+  if (salva && atual.codigo === p.c) {
+    const l = salva.linhas || [];
+    $('#f-l1').value = l[0] || ''; $('#f-l2').value = l[1] || ''; $('#f-l3').value = l[2] || '';
+    if (salva.conteudo !== undefined) $('#f-conteudo').value = salva.conteudo;
+    if (salva.unidade) $('#f-unidade').value = salva.unidade;
+    $('#prod-sel').innerHTML += ' <b class="tag-salva">✔ Usando a descrição salva deste produto</b>';
+    atualizarEditor();
+  }
 });
 ligarBusca('f-brinde-busca', 'sug-brinde', null, p => {
   atual.brindeCod = p.c; $('#f-brinde').value = humanizar(p.d); atualizarEditor();
@@ -434,6 +495,7 @@ async function salvar() {
     let id = editandoId;
     if (id) await updateDoc(doc(db, 'ofertas', id), dados);
     else { dados.criadoEm = serverTimestamp(); dados.criadoPor = PERFIL.email; id = (await addDoc(collection(db, 'ofertas'), dados)).id; }
+    guardarDescricao(o);
     const salvo = { ...dados, id, atualizadoEm: Date.now() };
     OFERTAS = [salvo, ...OFERTAS.filter(x => x.id !== id)];
     renderOfertas();
