@@ -260,7 +260,7 @@ const CAMPOS = ['f-modelo', 'f-mecanica', 'f-l1', 'f-l2', 'f-l3', 'f-unidade', '
   'f-pct', 'f-emb', 'f-cashback', 'f-brinde', 'f-ini', 'f-fim', 'f-tamanho', 'f-estoque', 'f-venc', 'f-semfundo'];
 CAMPOS.forEach(id => { const el = $('#' + id); el.addEventListener('input', atualizarEditor); el.addEventListener('change', atualizarEditor); });
 
-const PADRAO = { modelo: 'oferta', mecanica: '02', unidade: 'UNIDADE', qtd: 2, pague: 1, pct: 50, embalagem: 'A CAIXA', tamanho: 'A4' };
+const PADRAO = { modelo: 'oferta', mecanica: '02', unidade: 'UNIDADE', qtd: 2, pague: 1, pct: 50, embalagem: 'A CAIXA', tamanho: 'A4', semFundo: true };
 const fmtCampo = v => 'R$ ' + moeda(num(v) || 0);
 // campos de dinheiro: o encarregado digita só os números e a vírgula entra sozinha (399 → R$ 3,99)
 ['f-de', 'f-por', 'f-cashback', 'f-kgde', 'f-kgpor'].forEach(id => {
@@ -382,7 +382,12 @@ function atualizarEditor() {
   if (r.erro) info.push(`<span style="color:#C62828"><b>Atenção:</b> ${esc(r.erro)}</span>`);
   $('#calc-info').innerHTML = info.join('<br>');
   clearTimeout(prevT);
-  prevT = setTimeout(async () => { await fontesProntas; montar($('#preview'), o, { largura: '340px', modo: o.semFundo ? 'semfundo' : 'fundo' }); }, 60);
+  prevT = setTimeout(async () => { await fontesProntas; montar($('#preview'), o, { largura: '340px', modo: 'fundo' }); }, 60);
+  // a prévia mostra sempre a placa completa; o aviso diz como ela sai na impressão
+  $('#prev-modo').className = 'prev-modo ' + (o.semFundo ? 'sem' : 'com');
+  $('#prev-modo').innerHTML = o.semFundo
+    ? '🖨 Na impressão sai <b>SEM FUNDO</b>: só os textos e preços, para a placa da gráfica.'
+    : '🖨 Na impressão sai a <b>placa completa</b>, com fundo colorido.';
 }
 
 function abrirEditor(o, duplicar = false) {
