@@ -292,8 +292,8 @@ export function ajustar(placa) {
   placa.querySelectorAll('.brinde').forEach(d => encolher(d.querySelector('.fit'), 6.4, 2.2, 0.1, d));
   placa.querySelectorAll('.kg').forEach(t => encolher(t, placa.classList.contains('l-avista') ? 4.6 : 4, 2.4, 0.05, null, true));
   const dp = placa.classList.contains('l-depor');
-  placa.querySelectorAll('.titulo').forEach(t => encolher(t, t.classList.contains('t1') ? (dp ? 9.6 : 11) : (dp ? 6 : 6.6), 3, 0.1, null, true));
-  placa.querySelectorAll('.rodape').forEach(t => encolher(t, t.classList.contains('bold') ? 3.1 : (dp && t.closest('.cx-cor') ? 2.5 : (placa.classList.contains('m-clube') && t.closest('.cx-cor') ? 2.6 : 2.9)), 1.6, 0.05));
+  placa.querySelectorAll('.titulo').forEach(t => encolher(t, t.classList.contains('t1') ? (dp ? 9 : 11) : (dp ? 5.6 : 6.6), 3, 0.1, null, true));
+  placa.querySelectorAll('.rodape').forEach(t => encolher(t, t.classList.contains('bold') ? 3.1 : (dp && t.closest('.cx-cor') ? 2.3 : (placa.classList.contains('m-clube') && t.closest('.cx-cor') ? 2.6 : 2.9)), 1.6, 0.05));
   placa.querySelectorAll('.chamada').forEach(t => encolher(t, 4, 2, 0.05, null, true));
   // a linha de preço por último: ocupa o espaço que sobrou
   // De/Por e cashback: 3 colunas — rótulo (De:/Por:) à esquerda, preço centralizado e unidade à direita.
@@ -332,6 +332,14 @@ export function ajustar(placa) {
     const ult = escalas.length - 1;
     linhas.forEach((l, i) => { if (i < ult) l._aplica(Math.min(escalas[i], escalas[ult])); });
   }
+  // unidade (UNI, 100G) na mesma altura da base do preço
+  if (colunas) linhas.forEach(l => {
+    const u = l.querySelector('.ucol'), p = l.querySelector('.preco');
+    if (!u || !p) return;
+    u.style.paddingBottom = '0px';
+    const dif = u.getBoundingClientRect().bottom - p.getBoundingClientRect().bottom;
+    u.style.paddingBottom = Math.max(0, dif) + 'px';
+  });
   placa.querySelectorAll('svg.bc').forEach(svg => {
     if (svg.dataset.ok || !window.JsBarcode) return;
     const code = svg.dataset.code;
