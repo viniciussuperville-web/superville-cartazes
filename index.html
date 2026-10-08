@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cartazes SuperVille</title>
+<link rel="icon" href="assets/logo-sv.png">
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/placa.css">
+<link rel="stylesheet" href="css/app.css">
+<style id="estilo-pagina"></style>
+<script src="vendor/JsBarcode.all.min.js"></script>
+</head>
+<body>
+
+<!-- ================= LOGIN ================= -->
+<section id="tela-login" class="tela" hidden>
+  <form id="form-login" class="card login">
+    <div class="login-topo"><img src="assets/logo-sv.png" alt="SuperVille"><div><b>Cartazes</b><span>SuperVille</span></div></div>
+    <label>E-mail<input type="email" id="login-email" required autocomplete="username"></label>
+    <label>Senha<input type="password" id="login-senha" required autocomplete="current-password"></label>
+    <button class="btn verde" type="submit">Entrar</button>
+    <button class="link" type="button" id="btn-esqueci">Esqueci minha senha</button>
+    <p class="msg" id="login-msg"></p>
+  </form>
+</section>
+
+<!-- ================= APP ================= -->
+<section id="tela-app" class="tela" hidden>
+  <header class="topo">
+    <img src="assets/logo-sv.png" alt="SuperVille" class="topo-logo">
+    <div class="topo-titulo"><b>Cartazes</b><span id="topo-loja"></span></div>
+    <nav class="abas">
+      <button data-aba="ofertas" class="ativa">Ofertas</button>
+      <button data-aba="lotes">Lotes de impressão</button>
+      <button data-aba="adm" id="btn-aba-adm" hidden>Administração</button>
+    </nav>
+    <div class="topo-dir">
+      <select id="sel-loja" hidden title="Loja"></select>
+      <span id="topo-user"></span>
+      <button class="btn contorno" id="btn-sair">Sair</button>
+    </div>
+  </header>
+
+  <!-- Ofertas -->
+  <main id="aba-ofertas" class="aba">
+    <div class="barra">
+      <h2>Ofertas cadastradas</h2>
+      <input type="search" id="busca-ofertas" placeholder="Buscar por descrição ou código">
+      <select id="filtro-mec"><option value="">Todas as dinâmicas</option></select>
+      <div class="espaco"></div>
+      <button class="btn contorno" id="btn-branco">Placas em branco</button>
+      <button class="btn preto" id="btn-imprimir-sel" disabled>Imprimir selecionados</button>
+      <button class="btn verde" id="btn-nova">+ Nova placa</button>
+    </div>
+    <div class="tabela-wrap">
+      <table class="tabela" id="tab-ofertas">
+        <thead><tr>
+          <th class="chk"><input type="checkbox" id="chk-todos"></th>
+          <th>Código</th><th>Descrição</th><th>Modelo</th><th>Dinâmica</th>
+          <th class="num">Preço De</th><th class="num">Preço Por</th><th>Vigência</th><th class="acoes">Ações</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="vazio" id="ofertas-vazio" hidden>Nenhuma oferta cadastrada. Clique em <b>+ Nova placa</b> para começar.</p>
+    </div>
+  </main>
+
+  <!-- Lotes -->
+  <main id="aba-lotes" class="aba" hidden>
+    <div class="barra"><h2>Lotes de impressão</h2><input type="search" id="busca-lotes" placeholder="Buscar lote"></div>
+    <div class="tabela-wrap">
+      <table class="tabela" id="tab-lotes">
+        <thead><tr><th>Lote</th><th>Nome</th><th class="num">Qtd. placas</th><th>Tamanho</th><th>Impressão</th><th>Data</th><th>Por</th><th class="acoes">Ações</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="vazio" id="lotes-vazio" hidden>Nenhum lote impresso ainda.</p>
+    </div>
+  </main>
+
+  <!-- ADM -->
+  <main id="aba-adm" class="aba" hidden>
+    <div class="grade-adm">
+      <div class="card">
+        <h3>Lojas</h3>
+        <table class="tabela"><thead><tr><th>Loja</th><th>Identificador</th></tr></thead><tbody id="adm-lojas"></tbody></table>
+        <form id="form-loja" class="linha-form">
+          <input id="nova-loja" placeholder="Nome da nova loja" required>
+          <button class="btn verde">Adicionar loja</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3>Novo acesso</h3>
+        <form id="form-usuario" class="form-col">
+          <label>E-mail<input type="email" id="nu-email" required></label>
+          <label>Senha inicial (mín. 6 caracteres)<input type="text" id="nu-senha" minlength="6" required></label>
+          <label>Loja<select id="nu-loja" required></select></label>
+          <p class="dica">Cria o login no Firebase e já vincula à loja. Se o e-mail já existir no Firebase, apenas vincula.</p>
+          <button class="btn verde">Criar acesso</button>
+        </form>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Usuários e acessos</h3>
+      <table class="tabela"><thead><tr><th>E-mail</th><th>Loja</th><th>Perfil</th><th>Ativo</th><th class="acoes">Ações</th></tr></thead><tbody id="adm-usuarios"></tbody></table>
+    </div>
+  </main>
+</section>
+
+<!-- ================= EDITOR ================= -->
+<dialog id="dlg-editor" class="dlg grande">
+  <form method="dialog" id="form-editor" class="editor">
+    <div class="dlg-topo"><h3 id="editor-titulo">Nova placa</h3><button type="button" class="x" data-fechar>&times;</button></div>
+    <div class="editor-corpo">
+      <div class="editor-prev">
+        <div id="preview"></div>
+        <div class="calc" id="calc-info"></div>
+      </div>
+      <div class="editor-campos">
+        <div class="g2">
+          <label>Modelo<select id="f-modelo">
+            <option value="oferta">Oferta</option><option value="clube">Clube Fidelidade</option><option value="cashback">Cashback</option>
+          </select></label>
+          <label id="w-mecanica">Dinâmica<select id="f-mecanica"></select></label>
+        </div>
+
+        <div class="busca-prod">
+          <label>Produto (código interno, código de barras ou descrição)
+            <div class="g-busca"><input id="f-busca" autocomplete="off" placeholder="Ex.: 31608, 7891234567890 ou café pilão">
+            <select id="f-setor"><option value="">Todos os setores</option></select></div>
+          </label>
+          <div class="sugestoes" id="sug-produto" hidden></div>
+          <div class="prod-sel" id="prod-sel"></div>
+        </div>
+
+        <div class="g3">
+          <label>Linha 1 (tipo)<input id="f-l1"></label>
+          <label>Linha 2 (marca)<input id="f-l2"></label>
+          <label>Linha 3 (complemento)<input id="f-l3"></label>
+        </div>
+
+        <div class="g3">
+          <label>Unidade<select id="f-unidade"></select></label>
+          <label title="Usado para calcular o preço de referência (kg, litro, unidade)">Conteúdo (ref.)<input id="f-conteudo" placeholder="250G, 1,35L, C/2UN"></label>
+          <label id="w-de"><span id="lbl-de">Preço De</span><input id="f-de" inputmode="decimal" placeholder="0,00"></label>
+        </div>
+
+        <div class="g3">
+          <label id="w-por"><span id="lbl-por">Preço Por</span><input id="f-por" inputmode="decimal" placeholder="0,00"></label>
+          <label id="w-qtd"><span id="lbl-qtd">Quantidade</span><input id="f-qtd" type="number" min="1" step="1"></label>
+          <label id="w-pague">Pague<input id="f-pague" type="number" min="1" step="1"></label>
+          <label id="w-pct">% de desconto na última<input id="f-pct" inputmode="decimal" placeholder="50"></label>
+          <label id="w-emb">Embalagem<select id="f-emb"></select></label>
+          <label id="w-cashback">Valor do cashback<input id="f-cashback" inputmode="decimal" placeholder="0,00"></label>
+        </div>
+
+        <div class="busca-prod" id="w-brinde">
+          <label>Produto que o cliente leva (código ou descrição)
+            <input id="f-brinde-busca" autocomplete="off" placeholder="Buscar brinde"></label>
+          <div class="sugestoes" id="sug-brinde" hidden></div>
+          <label>Descrição do brinde na placa<input id="f-brinde"></label>
+        </div>
+
+        <div class="g3">
+          <label>Data inicial<input type="date" id="f-ini"></label>
+          <label>Data final<input type="date" id="f-fim"></label>
+          <label>Tamanho para impressão<select id="f-tamanho"></select></label>
+        </div>
+        <div class="checks">
+          <label class="chk"><input type="checkbox" id="f-estoque"> Oferta válida enquanto durarem os estoques</label>
+          <label class="chk"><input type="checkbox" id="f-venc"> Produto próximo do vencimento</label>
+          <label class="chk"><input type="checkbox" id="f-semfundo"> Imprimir sem fundo (placa da gráfica)</label>
+          <label class="chk"><input type="checkbox" id="f-manter"> Manter dinâmica para novo preenchimento</label>
+        </div>
+        <p class="msg" id="editor-msg"></p>
+      </div>
+    </div>
+    <div class="dlg-rodape">
+      <button type="button" class="btn contorno" data-fechar>Cancelar</button>
+      <button type="button" class="btn preto" id="btn-salvar">Salvar</button>
+      <button type="button" class="btn verde" id="btn-salvar-imp">Salvar e imprimir</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ================= IMPRESSÃO ================= -->
+<dialog id="dlg-imp" class="dlg">
+  <form method="dialog" class="form-col" id="form-imp">
+    <div class="dlg-topo"><h3 id="imp-titulo">Imprimir</h3><button type="button" class="x" data-fechar>&times;</button></div>
+    <p id="imp-info" class="dica"></p>
+    <label id="w-imp-modelo">Modelo<select id="imp-modelo">
+      <option value="oferta">Oferta</option><option value="clube">Clube Fidelidade</option><option value="cashback">Cashback</option>
+    </select></label>
+    <label>Tamanho<select id="imp-tamanho"></select></label>
+    <label id="w-imp-modo">Impressão<select id="imp-modo">
+      <option value="fundo">Com fundo (placa completa)</option>
+      <option value="semfundo">Sem fundo (só textos, para placa da gráfica)</option>
+    </select></label>
+    <label id="w-imp-nome">Nome do lote (opcional)<input id="imp-nome" placeholder="Ex.: Tabloide semana 41"></label>
+    <label id="w-imp-copias">Quantidade de placas<input type="number" id="imp-copias" min="1" value="4"></label>
+    <p class="dica">Na janela de impressão, use <b>Margens: Nenhuma</b> e marque <b>Gráficos de plano de fundo</b>.</p>
+    <div class="dlg-rodape">
+      <button type="button" class="btn contorno" data-fechar>Cancelar</button>
+      <button type="button" class="btn verde" id="btn-imp-ok">Imprimir</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast"></div>
+<div id="carregando"><div class="spin"></div></div>
+<div id="area-impressao"></div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
