@@ -1,29 +1,108 @@
-<!doctype html><html><head><meta charset="utf-8"><title>Exemplos de placas · SuperVille</title>
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modelos de placas · SuperVille</title>
+<link rel="icon" href="assets/logo-sv.png">
 <link rel="stylesheet" href="css/fonts.css"><link rel="stylesheet" href="css/placa.css">
 <script src="vendor/JsBarcode.all.min.js"></script>
-<style>body{margin:0;background:#888;display:flex;flex-wrap:wrap;gap:20px;padding:20px}.c{display:inline-block}</style>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Montserrat', Arial, sans-serif; background: #F4F5F4; color: #1A1A1A; }
+  header { background: #000; color: #fff; display: flex; align-items: center; gap: 18px; padding: 14px 28px; border-bottom: 6px solid #3BB072; }
+  header img { height: 58px; }
+  header h1 { margin: 0; font-size: 24px; } header p { margin: 2px 0 0; color: #3BB072; font-weight: 700; font-size: 14px; }
+  main { max-width: 1320px; margin: 0 auto; padding: 10px 24px 40px; }
+  section { margin-top: 26px; break-inside: avoid-page; }
+  h2 { font-size: 20px; margin: 0 0 4px; display: flex; align-items: center; gap: 10px; }
+  h2 i { width: 14px; height: 26px; border-radius: 3px; display: inline-block; }
+  .sub { margin: 0 0 14px; color: #555; font-size: 13px; }
+  .grade { display: grid; grid-template-columns: repeat(auto-fill, 300px); gap: 22px 20px; }
+  figure { margin: 0; width: 300px; break-inside: avoid; }
+  figure .c { box-shadow: 0 3px 12px rgba(0,0,0,.22); }
+  figcaption { margin-top: 8px; font-size: 13px; font-weight: 700; }
+  figcaption small { display: block; font-weight: 400; color: #666; font-size: 12px; margin-top: 2px; }
+  .intro { background: #fff; border-left: 5px solid #3BB072; border-radius: 8px; padding: 12px 16px; margin-top: 20px; font-size: 14px; line-height: 1.5; }
+  footer { text-align: center; color: #777; font-size: 12px; padding: 20px; }
+  @media print {
+    @page { size: A4 landscape; margin: 10mm; }
+    body { background: #fff; }
+    main { padding: 0 6mm; }
+    header { padding: 8px 18px; } header img { height: 44px; } header h1 { font-size: 20px; }
+    .intro { margin-top: 10px; padding: 8px 12px; font-size: 12px; }
+    section { break-inside: auto; margin-top: 14px; }
+    section + section { break-inside: avoid; }
+    h2, .sub { break-after: avoid; }
+    h2 { font-size: 16px; } .sub { margin-bottom: 8px; font-size: 11px; }
+    .grade { grid-template-columns: repeat(5, 186px); gap: 12px 18px; }
+    figure { width: 186px; } figcaption { font-size: 10px; margin-top: 4px; } figcaption small { font-size: 9px; }
+    footer { display: none; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
 </head><body>
+<header>
+  <img src="assets/logo-sv.png" alt="SuperVille">
+  <div><h1>Modelos de placas de oferta</h1><p>Sistema de Cartazes SuperVille</p></div>
+</header>
+<main>
+  <div class="intro">
+    Todas as placas são geradas pelo sistema a partir do código do produto, com os cálculos automáticos
+    (preço por unidade, economia, preço de referência por kg/litro e preço do kg no hortifruti).
+    Impressão em <b>A4</b>, <b>A5</b> (2 por folha) ou <b>A6</b> (4 por folha), com fundo ou <b>sem fundo</b> para a placa da gráfica.
+  </div>
+  <div id="conteudo"></div>
+</main>
+<footer>SuperVille Supermercado · Vila Romana · Vila Leopoldina · Santo Amaro · Pio XI</footer>
+
 <script type="module">
-import {montar} from './js/placa.js';
-const base={};
-const ex=[
- {modelo:'oferta',mecanica:'01',codigo:'77',linhas:['MANGA','PALMER',''],unidade:'100G',de:1.29},
- {modelo:'oferta',mecanica:'02',dataIni:'2026-10-02',dataFim:'2026-10-18',codigo:'31608',barras:'',linhas:['CAFÉ COFFEE ++ GRÃOS','SUL DE MINAS 250G',''],conteudo:'250G',unidade:'UNIDADE',de:37.99,por:28.99},
- {modelo:'clube',mecanica:'02',codigo:'12345',barras:'7891000100103',linhas:['QUEIJO PARMESÃO','TIROLEZ',''],unidade:'100G',de:12.99,por:10.99,kgDe:129.99,kgPor:109.99},
- {modelo:'cashback',linhas:['KIT TAÇA RIEDEL 001','MAGNUM C/2UN',''],conteudo:'C/2UN',unidade:'UNIDADE',de:298.99,cashback:29.89},
- {modelo:'oferta',mecanica:'01',barras:'7896756800178',codigo:'5501',linhas:['ESPUMANTE NACIONAL','TERRA NOVA','DEMI SEC E MOSCATEL 750ML'],conteudo:'750ML',unidade:'CADA',de:39.99},
- {modelo:'oferta',mecanica:'03',barras:'7896065880106',codigo:'882',linhas:['ÁGUA','MINALBA','SEM GÁS 1,5L'],conteudo:'1,5L',unidade:'UNIDADE',de:5.99,qtd:3,pague:2},
- {modelo:'oferta',mecanica:'04',codigo:'2223',linhas:['QUIABO','BANDEJA','200G'],conteudo:'200G',unidade:'CADA',de:5.99,por:4.99,qtd:2},
- {modelo:'clube',mecanica:'05',codigo:'182',linhas:['MORANGO','BANDEJA','DUAS CAMADAS 250G'],conteudo:'250G',unidade:'UNIDADE',de:14.99,por:9.99,qtd:3},
- {modelo:'oferta',mecanica:'06',barras:'7898380411898',codigo:'7811',linhas:['PÃO BELIVE','SEM GLÚTEN','MULTIGRÃOS 400G'],conteudo:'400G',unidade:'UNIDADE',de:27.99,qtd:2,pct:50,proxVenc:true},
- {modelo:'oferta',mecanica:'07',barras:'8000815065265',codigo:'991',linhas:['ÁGUA MINERAL','ACQUA PANNA','505ML'],conteudo:'505ML',unidade:'UNIDADE',de:17.99,qtd:1,brindeDesc:'ÁGUA MIN PERRIER 200ML COM GÁS'},
- {modelo:'clube',mecanica:'10',barras:'7898215157403',codigo:'443',linhas:['LEITE','NINHO','INTEGRAL TP 1L'],conteudo:'1L',unidade:'UNIDADE',de:7.99,qtd:12,embalagem:'A CAIXA',enquantoDurar:true},
- {modelo:'oferta',mecanica:'02',codigo:'1',linhas:['UVA','THOMPSON',''],unidade:'100G',de:3.99,por:3.49},
- {modelo:'clube',mecanica:'01',codigo:'2',linhas:['SUCO BE BAH','UVA INTEGRAL 1,35L',''],conteudo:'1,35L',unidade:'UNIDADE',de:11.99},
+import { montar } from './js/placa.js';
+const PDF = new URLSearchParams(location.search).has('pdf');
+const V = { dataIni: '2026-10-08', dataFim: '2026-10-18' };
+const GRUPOS = [
+  { t: 'Oferta', cor: '#E7110D', sub: 'Placa vermelha "Aqui tem Oferta!", com todas as dinâmicas de promoção.', itens: [
+    ['01 · À vista', 'Preço único, área toda branca', { modelo: 'oferta', mecanica: '01', linhas: ['ESPUMANTE NACIONAL', 'TERRA NOVA', 'DEMI SEC E MOSCATEL 750ML'], conteudo: '750ML', unidade: 'CADA', de: 39.99, ...V }],
+    ['02 · De / Por', 'Economia calculada automaticamente', { modelo: 'oferta', mecanica: '02', linhas: ['CAFÉ COFFEE ++ GRÃOS', 'SUL DE MINAS 250G', ''], conteudo: '250G', unidade: 'UNIDADE', de: 37.99, por: 28.99, ...V }],
+    ['03 · Compre e Pague', 'Preço por unidade calculado', { modelo: 'oferta', mecanica: '03', linhas: ['ÁGUA MINERAL', 'MINALBA', 'SEM GÁS 1,5L'], conteudo: '1,5L', unidade: 'UNIDADE', de: 5.99, qtd: 3, pague: 2, ...V }],
+    ['04 · Na compra de X unidades', 'Preço promocional por unidade', { modelo: 'oferta', mecanica: '04', linhas: ['QUIABO', 'BANDEJA', '200G'], conteudo: '200G', unidade: 'CADA', de: 5.99, por: 4.99, qtd: 2, ...V }],
+    ['05 · A partir de X unidades', 'Preço promocional por unidade', { modelo: 'oferta', mecanica: '05', linhas: ['MORANGO', 'BANDEJA', 'DUAS CAMADAS 250G'], conteudo: '250G', unidade: 'UNIDADE', de: 14.99, por: 9.99, qtd: 3, ...V }],
+    ['06 · Percentual de desconto', 'Desconto na última unidade', { modelo: 'oferta', mecanica: '06', linhas: ['PÃO BELIVE', 'SEM GLÚTEN', 'MULTIGRÃOS 400G'], conteudo: '400G', unidade: 'UNIDADE', de: 27.99, qtd: 2, pct: 50, ...V }],
+    ['07 · Leve grátis', 'Na compra + R$ 0,01 leva outro produto', { modelo: 'oferta', mecanica: '07', linhas: ['ÁGUA MINERAL', 'ACQUA PANNA', '505ML'], conteudo: '505ML', unidade: 'UNIDADE', de: 17.99, qtd: 1, brindeDesc: 'ÁGUA MINERAL PERRIER 200ML COM GÁS', ...V }],
+    ['10 · Oferta pack', 'Preço da unidade e total da embalagem', { modelo: 'oferta', mecanica: '10', linhas: ['LEITE', 'NINHO', 'INTEGRAL 1L'], conteudo: '1L', unidade: 'UNIDADE', de: 7.99, qtd: 12, embalagem: 'A CAIXA', enquantoDurar: true }],
+  ]},
+  { t: 'Clube Fidelidade', cor: '#000', sub: 'Placa preta "Se cadastre e Aproveite!", com QR Code e selo Sou Mais. Aceita as mesmas dinâmicas da Oferta.', itens: [
+    ['02 · De / Por', 'Oferta exclusiva do Clube', { modelo: 'clube', mecanica: '02', linhas: ['SUCO BE BAH', 'UVA INTEGRAL 1,35L', ''], conteudo: '1,35L', unidade: 'UNIDADE', de: 15.99, por: 11.99, ...V }],
+    ['01 · À vista', 'Preço único do Clube', { modelo: 'clube', mecanica: '01', linhas: ['AZEITE EXTRA VIRGEM', 'GALLO', '500ML'], conteudo: '500ML', unidade: 'UNIDADE', de: 34.99, ...V }],
+    ['05 · A partir de X unidades', 'Mesma dinâmica, versão Clube', { modelo: 'clube', mecanica: '05', linhas: ['CERVEJA', 'HEINEKEN', 'LATA 350ML'], conteudo: '350ML', unidade: 'UNIDADE', de: 5.49, por: 4.49, qtd: 6, ...V }],
+    ['10 · Oferta pack', 'Total da embalagem', { modelo: 'clube', mecanica: '10', linhas: ['ÁGUA MINERAL', 'MINALBA', 'SEM GÁS 500ML'], conteudo: '500ML', unidade: 'UNIDADE', de: 2.49, qtd: 12, embalagem: 'O FARDO', ...V }],
+  ]},
+  { t: 'Cashback', cor: '#3BB87E', sub: 'Placa preta e verde "Aqui tem Cashback!", com o valor que o cliente do Clube recebe de volta.', itens: [
+    ['Cashback', 'Preço regular + valor do cashback', { modelo: 'cashback', linhas: ['KIT TAÇA RIEDEL 001', 'MAGNUM C/2UN', ''], conteudo: 'C/2UN', unidade: 'UNIDADE', de: 298.99, cashback: 29.89, ...V }],
+    ['Cashback', 'Exemplo com produto de mercearia', { modelo: 'cashback', linhas: ['VINHO TINTO', 'CASILLERO DEL DIABLO', 'CABERNET SAUVIGNON 750ML'], conteudo: '750ML', unidade: 'UNIDADE', de: 69.99, cashback: 7.00, ...V }],
+  ]},
+  { t: 'Hortifruti e balcão (a cada 100g)', cor: '#2E8F5B', sub: 'O encarregado digita o preço de 100g e a placa mostra o preço do kg em destaque (calculado e editável).', itens: [
+    ['À vista · 100g', 'Preço do kg em destaque', { modelo: 'oferta', mecanica: '01', linhas: ['MANGA', 'PALMER', ''], unidade: '100G', de: 1.29, ...V }],
+    ['De / Por · 100g', 'Preço do kg no De e no Por', { modelo: 'oferta', mecanica: '02', linhas: ['UVA', 'THOMPSON', ''], unidade: '100G', de: 3.99, por: 3.49, ...V }],
+    ['Clube · De / Por · 100g', 'Balcão de frios', { modelo: 'clube', mecanica: '02', linhas: ['QUEIJO PARMESÃO', 'TIROLEZ', ''], unidade: '100G', de: 12.99, por: 10.99, ...V }],
+  ]},
 ];
-await document.fonts.load('800 10px Montserrat');await document.fonts.load('300 10px Montserrat');await document.fonts.load('900 10px Montserrat');await document.fonts.load('700 10px Montserrat');
+
+await Promise.all(['300', '500', '700', '800', '900'].map(w => document.fonts.load(`${w} 20px Montserrat`)));
 await document.fonts.ready;
-for(const o of ex){const d=document.createElement('div');d.className='c';document.body.appendChild(d);montar(d,{...base,...o},{largura:"420px"});}
-const imgs=[...document.images];await Promise.all(imgs.map(i=>i.complete?1:new Promise(r=>i.onload=i.onerror=r)));
-document.body.dataset.pronto=1;
-</script></body></html>
+const raiz = document.getElementById('conteudo');
+GRUPOS.forEach((g, gi) => {
+  const s = document.createElement('section');
+  if (gi === 0) s.className = 'primeira';
+  s.innerHTML = `<h2><i style="background:${g.cor}"></i>${g.t}</h2><p class="sub">${g.sub}</p><div class="grade"></div>`;
+  raiz.appendChild(s);
+  const grade = s.querySelector('.grade');
+  for (const [titulo, desc, o] of g.itens) {
+    const f = document.createElement('figure');
+    f.innerHTML = `<div class="c"></div><figcaption>${titulo}<small>${desc}</small></figcaption>`;
+    grade.appendChild(f);
+    montar(f.querySelector('.c'), o, { largura: PDF ? '186px' : '300px' });
+  }
+});
+await Promise.all([...document.images].map(i => i.complete ? 1 : new Promise(r => i.onload = i.onerror = r)));
+document.body.dataset.pronto = 1;
+</script>
+</body></html>
