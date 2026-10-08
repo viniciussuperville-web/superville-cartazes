@@ -293,7 +293,7 @@ export function ajustar(placa) {
   placa.querySelectorAll('.kg').forEach(t => encolher(t, placa.classList.contains('l-avista') ? 4.6 : 4, 2.4, 0.05, null, true));
   const dp = placa.classList.contains('l-depor');
   placa.querySelectorAll('.titulo').forEach(t => encolher(t, t.classList.contains('t1') ? (dp ? 9.6 : 11) : (dp ? 6 : 6.6), 3, 0.1, null, true));
-  placa.querySelectorAll('.rodape').forEach(t => encolher(t, t.classList.contains('bold') ? 3.1 : (placa.classList.contains('m-clube') && t.closest('.cx-cor') ? 2.6 : 2.9), 1.6, 0.05));
+  placa.querySelectorAll('.rodape').forEach(t => encolher(t, t.classList.contains('bold') ? 3.1 : (dp && t.closest('.cx-cor') ? 2.5 : (placa.classList.contains('m-clube') && t.closest('.cx-cor') ? 2.6 : 2.9)), 1.6, 0.05));
   placa.querySelectorAll('.chamada').forEach(t => encolher(t, 4, 2, 0.05, null, true));
   // a linha de preço por último: ocupa o espaço que sobrou
   // De/Por e cashback: 3 colunas — rótulo (De:/Por:) à esquerda, preço centralizado e unidade à direita.

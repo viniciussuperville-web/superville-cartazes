@@ -28,13 +28,14 @@
 .placa .cx-branca, .placa .cx-cor {
   position: relative; display: flex; flex-direction: column; overflow: hidden;
 }
-.placa .cx-branca { background: #fff; flex: 0 0 50em; padding: 2.2em 2.6em 1.4em; }
+.placa .cx-branca { background: #fff; flex: 0 0 52.9em; padding: 2.2em 2.6em 1.4em; }
+/* tamanho FIXO das caixas, igual às artes do Canva (não muda com a dinâmica — a placa da gráfica é sempre igual) */
+.m-oferta .cx-branca   { flex-basis: 52.9em; }
+.m-clube .cx-branca    { flex-basis: 51em; }
+.m-cashback .cx-branca { flex-basis: 45.1em; }
 .placa .cx-cor    { background: var(--box); flex: 1 1 0; min-height: 0; padding: 2.4em 2.6em 2em; }
 
 .l-avista .cx-branca { flex: 1 1 0; }
-.l-pack .cx-branca   { flex-basis: 48em; }
-.l-selo .cx-branca, .l-leve .cx-branca { flex-basis: 47em; }
-.l-cb .cx-branca     { flex-basis: 46em; }
 
 /* código de barras */
 .placa .cod { position: absolute; top: 1.3em; left: 1.6em; width: 15em; line-height: 1; }
@@ -139,12 +140,12 @@
 
 /* De/Por e cashback: rótulos e "R$" alinhados na mesma coluna (igual às artes do Canva) */
 .l-depor .linha, .l-cb .linha { justify-content: flex-start; padding-left: 0; }
-.l-depor .rot, .l-cb .rot { width: 19em; margin-right: 0; }
+.l-depor .rot, .l-cb .rot { width: 17em; margin-right: 0; }
+.l-depor .rot .lt, .l-cb .rot .lt { font-size: 3em; }
 .l-depor .linha .preco, .l-cb .linha .preco { flex: 1 1 auto; justify-content: center; }
 .l-depor .preco .rs, .l-cb .preco .rs { margin-left: 0; }
 /* hortifruti (100g): descrição maior */
 .u100 .desc { max-height: 19em; margin-top: 1.6em; }
-.u100.l-depor .cx-branca { flex-basis: 54em; }
 .u100.l-avista .desc { max-height: 28em; margin-top: 10em; }
 .placa.l-cb .rot.cb { margin-right: 0; }
 /* sem fundo: desce um pouco a descrição para não encostar no corte da caixa branca da placa pré-impressa */
@@ -156,14 +157,16 @@
 .placa.preco-vermelho.l-avista .preco .rs, .placa.preco-vermelho.l-avista .preco .int, .placa.preco-vermelho.l-avista .preco .cent { color: #E30613; }
 
 /* De/Por: preço De menor, título menor e preço Por maior */
-.l-depor .cx-branca { flex-basis: 40em; }
-.u100.l-depor .cx-branca { flex-basis: 50em; }
 .l-depor .cx-branca .preco .int  { font-size: 12em; }
 .l-depor .cx-branca .preco .cent { font-size: 5.8em; }
-.l-depor .cx-cor .preco.big .int  { font-size: 34em; }
-.l-depor .cx-cor .preco.big .cent { font-size: 16em; }
+.l-depor .cx-cor .preco.big .int  { font-size: 36em; }
+.l-depor .cx-cor .preco.big .cent { font-size: 17em; }
 .l-depor .cx-cor .preco.big .rs { font-size: 4em; }
 /* coluna da unidade (De/Por e cashback): mesma posição nas duas linhas */
-.placa .ucol { width: 17em; flex-shrink: 0; align-self: stretch; display: flex; align-items: flex-end; padding: 0 0 1.2em 0; margin-left: -6em; }
+.placa .ucol { width: 14em; flex-shrink: 0; align-self: stretch; display: flex; align-items: flex-end; padding: 0 0 1.2em 0; margin-left: -6em; }
 .placa .ucol .un { font-weight: 300; font-size: 3.4em; line-height: 1; }
 .placa .ucol .un.b { font-weight: 700; }
+
+/* De/Por: menos respiro na caixa colorida para o preço Por crescer */
+.l-depor .cx-cor { padding-top: 1.4em; padding-bottom: 1.3em; }
+.l-depor .cx-cor .titulo { margin-bottom: .2em; }
