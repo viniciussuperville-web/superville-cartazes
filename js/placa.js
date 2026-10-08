@@ -126,7 +126,7 @@ const ABREV = [
   [/\bPCT\b\.?/g, 'PACOTE'], [/\bGAS\b/g, 'GÁS'], [/\bS[./]\s?GLUTEN\b/g, 'SEM GLÚTEN'], [/\bGLUTEN\b/g, 'GLÚTEN'],
   [/\bS[./]\s?LACTOSE\b/g, 'SEM LACTOSE'], [/\bZ[./]\s?ACUCAR\b/g, 'ZERO AÇÚCAR'], [/\bS[./]\s?ACUCAR\b/g, 'SEM AÇÚCAR'],
   [/\bS\/\s?OSSO\b/g, 'SEM OSSO'], [/\bC\/\s?OSSO\b/g, 'COM OSSO'], [/\bTEMP\b\.?/g, 'TEMPERADO'],
-  [/\bAGUA\b/g, 'ÁGUA'], [/\bÁGUA MIN\b\.?/g, 'ÁGUA MINERAL'], [/\bMACA\b/g, 'MAÇÃ'],
+  [/\bAGUA\b/g, 'ÁGUA'], [/(^|\s)ÁGUA MIN\b\.?/g, '$1ÁGUA MINERAL'], [/\bMACA\b/g, 'MAÇÃ'],
   [/\bMAMAO\b/g, 'MAMÃO'], [/\bMELAO\b/g, 'MELÃO'], [/\bLIMPADOR\b/g, 'LIMPADOR'], [/\bPROT\b\.?/g, 'PROTEÍNA'],
   [/\bAVELA\b/g, 'AVELÃ'], [/\bPESSEGO\b/g, 'PÊSSEGO'], [/\bMARACUJA\b/g, 'MARACUJÁ'], [/\bACAI\b/g, 'AÇAÍ'],
   [/\bCAMARAO\b/g, 'CAMARÃO'], [/\bSALMAO\b/g, 'SALMÃO'], [/\bLINGUICA\b/g, 'LINGUIÇA'], [/\bFILE\b/g, 'FILÉ'],
