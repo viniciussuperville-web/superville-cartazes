@@ -74,7 +74,7 @@
     <div class="barra"><h2>Lotes de impressão</h2><input type="search" id="busca-lotes" placeholder="Buscar lote"></div>
     <div class="tabela-wrap">
       <table class="tabela" id="tab-lotes">
-        <thead><tr><th>Lote</th><th>Nome</th><th class="num">Qtd. placas</th><th>Tamanho</th><th>Impressão</th><th>Data</th><th>Por</th><th class="acoes">Ações</th></tr></thead>
+        <thead><tr><th>Lote</th><th>Nome</th><th class="num">Qtd. placas</th><th>Tamanhos</th><th>Data</th><th>Por</th><th class="acoes">Ações</th></tr></thead>
         <tbody></tbody>
       </table>
       <p class="vazio" id="lotes-vazio" hidden>Nenhum lote impresso ainda.</p>
@@ -212,6 +212,28 @@
       <button type="button" class="btn contorno" data-fechar>Cancelar</button>
       <button type="button" class="btn preto" id="btn-salvar">Salvar</button>
       <button type="button" class="btn verde" id="btn-salvar-imp">Salvar e imprimir</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ================= IMPRESSÃO EM LOTE ================= -->
+<dialog id="dlg-lote" class="dlg medio">
+  <form method="dialog" id="form-lote" class="form-col">
+    <div class="dlg-topo"><h3 id="lote-titulo">Imprimir em lote</h3><button type="button" class="x" data-fechar>&times;</button></div>
+    <label>Nome do lote (opcional)<input id="lote-nome" placeholder="Ex.: Tabloide semana 41"></label>
+    <p class="dica">Coloque quantas placas de cada tamanho você quer de cada produto. A impressão sai <b>sem fundo</b>.</p>
+    <div class="tabela-wrap lote-wrap">
+      <table class="tabela" id="tab-lote">
+        <thead><tr><th>Descrição</th><th class="qtd">A4<small>1 por folha</small></th><th class="qtd">A5<small>2 por folha</small></th><th class="qtd">A6<small>4 por folha</small></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="lote-resumo" id="lote-resumo"></p>
+    <p class="msg" id="lote-msg"></p>
+    <div class="dlg-rodape">
+      <button type="button" class="btn contorno" data-fechar>Cancelar</button>
+      <button type="button" class="btn preto" id="btn-lote-salvar">Salvar lote</button>
+      <button type="button" class="btn verde" id="btn-lote-imp">Imprimir</button>
     </div>
   </form>
 </dialog>

@@ -519,81 +519,152 @@ $('#btn-salvar').addEventListener('click', async () => { const o = await salvar(
 $('#btn-salvar-imp').addEventListener('click', async () => {
   const o = await salvar(); if (!o) return;
   depoisDeSalvar(o);
-  const modo = 'semfundo'; // regra: impressão na loja é sempre sem fundo
-  await criarLote([o], o.tamanho, modo, '');
-  await imprimir([o], o.tamanho, modo);
+  await imprimirUma(o);
 });
 
 // ---------------- Impressão ----------------
+// Placas em branco (só ADM): diálogo simples
 function abrirImpressao(ctx) {
+  if (ctx.tipo !== 'branco') return abrirLote(ctx);
   impCtx = ctx;
-  const branco = ctx.tipo === 'branco', lote = ctx.tipo === 'lote';
-  $('#w-imp-modelo').hidden = !branco; $('#w-imp-copias').hidden = !branco;
-  $('#w-imp-modo').hidden = true; // impressão sempre sem fundo $('#w-imp-nome').hidden = branco || lote;
-  $('#imp-nome').value = '';
-  if (branco) {
-    $('#imp-titulo').textContent = 'Placas em branco';
-    $('#imp-info').textContent = 'Imprime só o fundo da placa, sem textos. Use para mandar para a gráfica ou ter placas prontas para imprimir por cima.';
-    $('#imp-copias').value = 4;
-  } else {
-    const itens = lote ? ctx.lote.itens : ctx.itens;
-    $('#imp-titulo').textContent = lote ? `Reimprimir lote ${ctx.lote.numero}` : 'Imprimir placas';
-    $('#imp-info').textContent = `${itens.length} placa(s) selecionada(s).`;
-    const tams = itens.map(i => i.tamanho || 'A4');
-    $('#imp-tamanho').value = lote ? ctx.lote.tamanho : tams.sort((a, b) => tams.filter(x => x === b).length - tams.filter(x => x === a).length)[0];
-    $('#imp-modo').value = lote ? ctx.lote.modo : (itens.every(i => i.semFundo) ? 'semfundo' : 'fundo');
-  }
+  $('#w-imp-modelo').hidden = false; $('#w-imp-copias').hidden = false;
+  $('#w-imp-modo').hidden = true; $('#w-imp-nome').hidden = true;
+  $('#imp-titulo').textContent = 'Placas em branco';
+  $('#imp-info').textContent = 'Imprime só o fundo da placa, sem textos. Use para mandar para a gráfica.';
+  $('#imp-copias').value = 4;
   $('#dlg-imp').showModal();
 }
 $('#btn-imp-ok').addEventListener('click', async () => {
   const tam = $('#imp-tamanho').value;
   $('#dlg-imp').close();
-  if (impCtx.tipo === 'branco') {
-    const n = Math.max(1, Math.min(200, parseInt($('#imp-copias').value) || 1));
-    const base = { modelo: $('#imp-modelo').value, mecanica: '02', linhas: [] };
-    return imprimir(Array.from({ length: n }, () => base), tam, 'branco');
-  }
-  const modo = 'semfundo'; // regra: impressão sempre sem fundo
-  if (impCtx.tipo === 'lote') return imprimir(impCtx.lote.itens, tam, modo);
-  await criarLote(impCtx.itens, tam, modo, $('#imp-nome').value.trim());
-  await imprimir(impCtx.itens, tam, modo);
+  const n = Math.max(1, Math.min(200, parseInt($('#imp-copias').value) || 1));
+  const base = { modelo: $('#imp-modelo').value, mecanica: '02', linhas: [] };
+  imprimir(Array.from({ length: n }, () => ({ ...base, copias: { [tam]: 1 } })), 'branco');
 });
 
-const limpar = o => { const { id, criadoEm, atualizadoEm, ...r } = o; return r; };
-async function criarLote(itens, tamanho, modo, nome) {
-  try {
-    const numero = LOTES.reduce((m, l) => Math.max(m, l.numero || 0), 0) + 1;
-    const dados = { loja: LOJA, numero, nome, tamanho, modo, qtd: itens.length, itens: itens.map(limpar), criadoEm: serverTimestamp(), criadoPor: PERFIL.email };
-    const ref = await addDoc(collection(db, 'lotes'), dados);
-    LOTES.unshift({ ...dados, id: ref.id, criadoEm: Date.now() });
-    renderLotes();
-  } catch (err) { toast('A placa será impressa, mas o lote não foi registrado: ' + msgErro(err), true); }
+// Impressão em lote: cada placa com a quantidade de cada tamanho (A4, A5, A6)
+const TAMS = ['A4', 'A5', 'A6'];
+let loteCtx = null;
+const copiasDe = o => o.copias || { [o.tamanho || 'A4']: 1 };
+function abrirLote(ctx) {
+  // ctx: { tipo: 'sel', itens } ou { tipo: 'lote', lote }
+  loteCtx = ctx;
+  const itens = ctx.tipo === 'lote' ? ctx.lote.itens : ctx.itens.map(o => ({ ...o, copias: copiasDe(o) }));
+  loteCtx.itens = itens.map(o => ({ ...o, copias: { ...copiasDe(o) } }));
+  $('#lote-titulo').textContent = ctx.tipo === 'lote' ? `Lote ${ctx.lote.numero}` : 'Imprimir em lote';
+  $('#lote-nome').value = ctx.tipo === 'lote' ? (ctx.lote.nome || '') : '';
+  $('#lote-msg').textContent = '';
+  $('#tab-lote tbody').innerHTML = loteCtx.itens.map((o, i) => `<tr data-i="${i}">
+      <td class="desc-col"><b>${esc(descOferta(o))}</b><small>${esc(MODELOS[o.modelo]?.nome || '')} · ${esc(dinamica(o))}</small></td>
+      ${TAMS.map(t => `<td class="qtd"><input type="number" min="0" max="99" data-t="${t}" value="${o.copias[t] || 0}"></td>`).join('')}
+    </tr>`).join('');
+  resumoLote();
+  $('#dlg-lote').showModal();
 }
+function lerCopias() {
+  $$('#tab-lote tbody tr').forEach(tr => {
+    const o = loteCtx.itens[+tr.dataset.i];
+    o.copias = {};
+    tr.querySelectorAll('input[data-t]').forEach(inp => {
+      const n = Math.max(0, Math.min(99, parseInt(inp.value) || 0));
+      if (n) o.copias[inp.dataset.t] = n;
+    });
+  });
+}
+function contar(itens) {
+  const tot = { A4: 0, A5: 0, A6: 0 };
+  itens.forEach(o => TAMS.forEach(t => tot[t] += (o.copias?.[t] || 0)));
+  const folhas = tot.A4 + Math.ceil(tot.A5 / 2) + Math.ceil(tot.A6 / 4);
+  return { tot, placas: tot.A4 + tot.A5 + tot.A6, folhas };
+}
+function resumoLote() {
+  lerCopias();
+  const c = contar(loteCtx.itens);
+  $('#lote-resumo').innerHTML = `<b>${c.placas}</b> placa(s): A4 <b>${c.tot.A4}</b> · A5 <b>${c.tot.A5}</b> · A6 <b>${c.tot.A6}</b> — <b>${c.folhas}</b> folha(s) A4`;
+}
+$('#tab-lote').addEventListener('input', resumoLote);
+$('#tab-lote').addEventListener('focusin', e => { if (e.target.matches('input')) e.target.select(); });
+$('#form-lote').addEventListener('submit', e => e.preventDefault());
 
-async function imprimir(itens, tamanho, modo) {
-  if (!itens.length) return;
+async function salvarLote() {
+  lerCopias();
+  const c = contar(loteCtx.itens);
+  if (!c.placas) { $('#lote-msg').textContent = 'Coloque a quantidade em pelo menos um tamanho.'; return null; }
+  const nome = $('#lote-nome').value.trim();
+  const itens = loteCtx.itens.filter(o => Object.keys(o.copias).length).map(limpar);
+  try {
+    if (loteCtx.tipo === 'lote') {
+      const dados = { nome, itens, qtd: c.placas, tamanho: resumoTam(c), modo: 'semfundo', atualizadoEm: serverTimestamp() };
+      await updateDoc(doc(db, 'lotes', loteCtx.lote.id), dados);
+      Object.assign(loteCtx.lote, dados);
+    } else {
+      const numero = LOTES.reduce((m, l) => Math.max(m, l.numero || 0), 0) + 1;
+      const dados = { loja: LOJA, numero, nome, itens, qtd: c.placas, tamanho: resumoTam(c), modo: 'semfundo', criadoEm: serverTimestamp(), criadoPor: PERFIL.email };
+      const ref = await addDoc(collection(db, 'lotes'), dados);
+      const novo = { ...dados, id: ref.id, criadoEm: Date.now() };
+      LOTES.unshift(novo);
+      loteCtx = { tipo: 'lote', lote: novo, itens: loteCtx.itens };
+      $('#lote-titulo').textContent = `Lote ${numero}`;
+    }
+    renderLotes();
+    return itens;
+  } catch (err) { $('#lote-msg').textContent = msgErro(err); return null; }
+}
+const resumoTam = c => TAMS.filter(t => c.tot[t]).map(t => `${t} ×${c.tot[t]}`).join(' · ');
+$('#btn-lote-salvar').addEventListener('click', async () => {
+  carregando(true);
+  try { if (await salvarLote()) { toast('Lote salvo.'); $('#dlg-lote').close(); } } finally { carregando(false); }
+});
+$('#btn-lote-imp').addEventListener('click', async () => {
+  carregando(true);
+  let itens;
+  try { itens = await salvarLote(); } finally { carregando(false); }
+  if (!itens) return;
+  $('#dlg-lote').close();
+  imprimir(itens, 'semfundo');
+});
+
+// monta as folhas: primeiro todas as A4, depois A5 (2 por folha, deitada) e A6 (4 por folha).
+// Cada tamanho usa uma "página nomeada" no CSS, então A4 em pé e A5 deitada saem na mesma impressão.
+async function imprimir(itens, modo = 'semfundo') {
+  const porTam = { A4: [], A5: [], A6: [] };
+  itens.forEach(o => TAMS.forEach(t => { for (let k = 0; k < (o.copias?.[t] || 0); k++) porTam[t].push(o); }));
+  if (!TAMS.some(t => porTam[t].length)) return;
   carregando(true);
   try {
     await fontesProntas;
-    const T = TAMANHOS[tamanho] || TAMANHOS.A4;
-    $('#estilo-pagina').textContent = `@page { size: ${T.pagina}; margin: 0; }`;
     const area = $('#area-impressao');
     area.innerHTML = '';
-    const cls = tamanho === 'A5' ? 'c2a5 paisagem' : tamanho === 'A6' ? 'c2a6' : 'c1';
-    for (let i = 0; i < itens.length; i += T.porFolha) {
-      const folha = document.createElement('div');
-      folha.className = 'folha ' + cls;
-      area.appendChild(folha);
-      for (const o of itens.slice(i, i + T.porFolha)) {
-        const slot = document.createElement('div');
-        folha.appendChild(slot);
-        montar(slot, o, { largura: T.largura + 'mm', modo });
+    for (const t of TAMS) {
+      const T = TAMANHOS[t], lista = porTam[t];
+      const cls = t === 'A5' ? 'c2a5 paisagem' : t === 'A6' ? 'c2a6' : 'c1';
+      for (let i = 0; i < lista.length; i += T.porFolha) {
+        const folha = document.createElement('div');
+        folha.className = 'folha ' + cls;
+        area.appendChild(folha);
+        for (const o of lista.slice(i, i + T.porFolha)) {
+          const slot = document.createElement('div');
+          folha.appendChild(slot);
+          montar(slot, o, { largura: T.largura + 'mm', modo });
+        }
       }
     }
     await Promise.all([...area.querySelectorAll('img')].map(im => im.complete ? 0 : new Promise(r => { im.onload = im.onerror = r; })));
     await espera();
   } finally { carregando(false); }
   window.print();
+}
+const limpar = o => { const { id, criadoEm, atualizadoEm, ...r } = o; return r; };
+// "Salvar e imprimir" do editor: 1 placa no tamanho escolhido, já registrada como lote
+async function imprimirUma(o) {
+  const item = { ...limpar(o), copias: { [o.tamanho || 'A4']: 1 } };
+  try {
+    const numero = LOTES.reduce((m, l) => Math.max(m, l.numero || 0), 0) + 1;
+    const dados = { loja: LOJA, numero, nome: '', itens: [item], qtd: 1, tamanho: `${o.tamanho || 'A4'} ×1`, modo: 'semfundo', criadoEm: serverTimestamp(), criadoPor: PERFIL.email };
+    const ref = await addDoc(collection(db, 'lotes'), dados);
+    LOTES.unshift({ ...dados, id: ref.id, criadoEm: Date.now() }); renderLotes();
+  } catch (err) { toast('A placa será impressa, mas o lote não foi registrado: ' + msgErro(err), true); }
+  imprimir([item], 'semfundo');
 }
 
 // ---------------- Lotes ----------------
@@ -606,10 +677,9 @@ function renderLotes() {
     <td>${esc(l.nome || '')}<br><small>${esc((l.itens || []).slice(0, 3).map(descOferta).join(' · '))}${(l.itens || []).length > 3 ? ' ...' : ''}</small></td>
     <td class="num">${l.qtd || (l.itens || []).length}</td>
     <td>${esc(l.tamanho || '')}</td>
-    <td>${l.modo === 'semfundo' ? 'Sem fundo' : 'Com fundo'}</td>
     <td>${esc(dataHora(l.criadoEm))}</td>
     <td><small>${esc(l.criadoPor || '')}</small></td>
-    <td class="acoes"><button class="ico imp" data-acao="imp" title="Reimprimir">🖨</button><button class="ico del" data-acao="del" title="Excluir">🗑</button></td>
+    <td class="acoes"><button class="ico imp" data-acao="imp" title="Abrir / reimprimir">🖨</button><button class="ico del" data-acao="del" title="Excluir">🗑</button></td>
   </tr>`).join('');
   $('#lotes-vazio').hidden = lista.length > 0;
 }

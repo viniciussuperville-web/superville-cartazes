@@ -174,3 +174,18 @@ label.chk input { width: auto; }
 .prev-modo.sem { background: #FFF7D6; border: 1.5px solid #E5C200; color: #4A3F00; }
 .prev-modo.com { background: var(--zebra); border: 1.5px solid var(--verde); color: #1F5C3B; }
 label.chk.destaque-chk { font-size: 14px; font-weight: 600; }
+
+/* impressão em lote */
+.dlg.medio { width: min(820px, 96vw); }
+.lote-wrap { max-height: 52vh; box-shadow: none; border: 1px solid var(--borda); }
+#tab-lote th.qtd, #tab-lote td.qtd { width: 92px; text-align: center; }
+#tab-lote th small { display: block; font-weight: 400; color: #bbb; font-size: 10px; }
+#tab-lote td.qtd input { width: 64px; text-align: center; font-size: 16px; font-weight: 700; padding: 7px 4px; }
+#tab-lote .desc-col small { display: block; }
+.lote-resumo { margin: 0; font-size: 14px; background: var(--zebra); border-left: 4px solid var(--verde); padding: 9px 12px; border-radius: 6px; }
+/* páginas nomeadas: A4 em pé (A4 e A6) e A4 deitada (A5) na mesma impressão */
+@page { size: A4 portrait; margin: 0; }
+@page folhaEmPe { size: A4 portrait; margin: 0; }
+@page folhaDeitada { size: A4 landscape; margin: 0; }
+.folha.c1, .folha.c2a6 { page: folhaEmPe; }
+.folha.c2a5 { page: folhaDeitada; }
