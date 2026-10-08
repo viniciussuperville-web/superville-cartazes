@@ -190,8 +190,13 @@ label.chk.destaque-chk { font-size: 14px; font-weight: 600; }
 .folha.c1, .folha.c2a6 { page: folhaEmPe; }
 .folha.c2a5 { page: folhaDeitada; }
 
-.imp-tams { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; margin-top: 10px; }
-.imp-tams > span { font-weight: 700; margin-right: 4px; }
-.imp-tams .btn small { font-weight: 500; opacity: .9; }
-.imp-tams .btn.impresso { background: #1F5C3B; }
-.imp-tams .btn.impresso::after { content: ' ✔'; }
+.imp-caixas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+.imp-caixa { border: 2px solid var(--borda); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 4px; background: #fff; }
+.imp-caixa b { font-size: 22px; }
+.imp-caixa span { font-size: 12px; color: var(--suave); }
+.imp-caixa em { font-style: normal; font-weight: 700; font-size: 14px; margin: 4px 0 8px; }
+.imp-caixa .btn { width: 100%; padding: 11px; font-size: 14px; }
+.imp-caixa.vazia { opacity: .5; }
+.imp-caixa.impresso { border-color: var(--verde); background: #F3FBF6; }
+.imp-caixa.impresso em::after { content: '  ✔ impresso'; color: var(--verde-esc); }
+@media (max-width: 700px) { .imp-caixas { grid-template-columns: 1fr; } }
