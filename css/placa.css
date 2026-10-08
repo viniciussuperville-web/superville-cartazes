@@ -79,7 +79,7 @@
 
 .placa .preco { display: flex; align-items: flex-end; line-height: 1; }
 .placa .preco .rs  { font-weight: 700; font-size: 3.3em; margin: 0 .5em .5em 0; }
-.placa .preco .int { font-weight: 800; font-size: 19em; letter-spacing: -.035em; line-height: .76; }
+.placa .preco .int { font-weight: 800; font-size: 19em; letter-spacing: -.035em; line-height: .9; }
 .placa .preco .dir { display: flex; flex-direction: column; align-self: stretch; justify-content: space-between; margin-left: .25em; }
 .placa .preco .cent { font-weight: 800; font-size: 9em; line-height: .78; letter-spacing: -.02em; }
 .placa .preco .un  { font-weight: 300; font-size: 3.4em; text-align: right; line-height: 1; padding-top: .3em; }
