@@ -72,6 +72,11 @@ function referencia(conteudo, unidade) {
   return null;
 }
 const refTexto = (r, preco) => r && preco > 0 ? `${r.rotulo}: R$ ${moeda(preco * r.fator)}` : '';
+const e100 = o => (o.unidade || '').toUpperCase() === '100G';
+// no hortifruti (100g) o preço do kg vira um destaque; nos demais, linha de referência
+const kgHTML = (o, preco) => e100(o) && preco > 0
+  ? `<div class="kg conteudo"><span>PREÇO DO KG</span> <b>R$ ${moeda(preco * 10)}</b></div>` : '';
+const refOuKg = (o, ref, preco) => e100(o) ? '' : refTexto(ref, preco);
 
 const unTexto = u => {
   u = (u || 'UNIDADE').toUpperCase();
@@ -106,7 +111,7 @@ export function validadeTexto(o) {
   if (o.enquantoDurar) return 'Oferta válida enquanto durarem os estoques';
   if (o.dataIni && o.dataFim) return `Oferta válida de ${dataBR(o.dataIni)} a ${dataBR(o.dataFim)}`;
   if (o.dataFim) return `Oferta válida até ${dataBR(o.dataFim)}`;
-  return '';
+  return 'Oferta válida enquanto durarem os estoques';
 }
 
 // ---------- descrição humanizada ----------
@@ -159,8 +164,8 @@ function precoHTML(valor, unidade, extra = '') {
 
 function descHTML(o) {
   const ls = (o.linhas || []).map(s => String(s || '').trim()).filter(Boolean);
-  if ((o.unidade || '').toUpperCase() === '100G') ls.push('A CADA 100G');
-  return `<div class="desc conteudo"><div class="fit">${ls.map(l => `<div class="ln">${esc(l.toUpperCase())}</div>`).join('')}</div></div>`;
+  const cada = e100(o) ? `<div class="ln cada">A CADA 100G</div>` : '';
+  return `<div class="desc conteudo"><div class="fit">${ls.map(l => `<div class="ln">${esc(l.toUpperCase())}</div>`).join('')}${cada}</div></div>`;
 }
 
 function barrasHTML(o) {
@@ -204,24 +209,24 @@ export function htmlPlaca(o, modo = 'fundo') {
     layout = 'l-cb';
     branca = barrasHTML(o) + descHTML(o) +
       `<div class="linha conteudo"><div class="rot"><span class="lt">Preço<br>regular</span></div>${precoHTML(r.regular, un)}</div>` +
-      rodape([refTexto(ref, r.regular)], 'ref');
+      kgHTML(o, r.regular) + rodape([refOuKg(o, ref, r.regular)], 'ref');
     cor = `<div class="titulo t2 conteudo">CLUBE FIDELIDADE<br>CASHBACK EXCLUSIVO DE:</div>` +
-      `<div class="linha conteudo"><div class="rot"><span class="bd">Valor do<br>cashback</span></div>${precoHTML(n(o.cashback), un)}</div>` +
+      `<div class="linha conteudo"><div class="rot cb"><span class="sb">Valor do<br>cashback</span></div>${precoHTML(n(o.cashback), un, 'big')}</div>` +
       rodape([val, 'O cashback EXPIRA em 30 dias após a data da compra', venc], 'centro bold');
   } else if (mec === '01') {
     layout = 'l-avista';
     branca = barrasHTML(o) + descHTML(o) +
       (m === 'clube' ? `<div class="clubetag conteudo">OFERTA EXCLUSIVA CLUBE DE FIDELIDADE</div>` : '') +
       `<div class="linha grande conteudo">${precoHTML(r.regular, un)}</div>` +
-      rodape([refTexto(ref, r.regular), val, venc]);
+      kgHTML(o, r.regular) + rodape([refOuKg(o, ref, r.regular), val, venc]);
   } else if (mec === '02') {
     layout = 'l-depor';
     branca = barrasHTML(o) + descHTML(o) +
       `<div class="linha conteudo"><div class="rot"><span class="bd">De:</span><span class="lt">Preço<br>regular</span></div>${precoHTML(r.regular, un)}</div>` +
-      rodape([refTexto(ref, r.regular)], 'ref');
+      kgHTML(o, r.regular) + rodape([refOuKg(o, ref, r.regular)], 'ref');
     cor = tituloCor(o) +
       `<div class="linha conteudo"><div class="rot"><span class="bd">Por:</span><span class="lt">Preço com<br>desconto</span></div>${precoHTML(r.promo, un, 'big')}</div>` +
-      rodape([refTexto(ref, r.promo), r.economia ? `Nessa promoção você economiza: R$ ${moeda(r.economia)}` : '', val, venc]);
+      kgHTML(o, r.promo) + rodape([refOuKg(o, ref, r.promo), r.economia ? `Nessa promoção você economiza: R$ ${moeda(r.economia)}` : '', val, venc]);
   } else if (['03', '04', '05', '06'].includes(mec)) {
     layout = 'l-selo';
     branca = barrasHTML(o) + descHTML(o) +
@@ -274,15 +279,26 @@ function encolher(el, max, min, passo = 0.05, box) {
 
 export function ajustar(placa) {
   placa.querySelectorAll('.desc').forEach(d => {
-    const nl = d.querySelectorAll('.ln').length || 1;
-    const max = placa.classList.contains('l-avista') ? (nl <= 2 ? 9.5 : 8) : (nl <= 2 ? 7.2 : 6.2);
+    const max = placa.classList.contains('l-avista') ? 8 : 6.2;
     encolher(d.querySelector('.fit'), max, 2.2, 0.1, d);
   });
   placa.querySelectorAll('.brinde').forEach(d => encolher(d.querySelector('.fit'), 6.4, 2.2, 0.1, d));
-  placa.querySelectorAll('.linha').forEach(l => encolher(l, 1, 0.35, 0.02));
+  placa.querySelectorAll('.kg').forEach(t => encolher(t, 4.6, 2.4, 0.05));
   placa.querySelectorAll('.titulo').forEach(t => encolher(t, t.classList.contains('t1') ? 11 : 6.6, 3, 0.1));
-  placa.querySelectorAll('.rodape').forEach(t => encolher(t, t.classList.contains('bold') ? 3.1 : 2.9, 1.6, 0.05));
+  placa.querySelectorAll('.rodape').forEach(t => encolher(t, t.classList.contains('bold') ? 3.1 : (placa.classList.contains('m-clube') && t.closest('.cx-cor') ? 2.6 : 2.9), 1.6, 0.05));
   placa.querySelectorAll('.chamada').forEach(t => encolher(t, 4, 2, 0.05));
+  // a linha de preço por último: ocupa o espaço que sobrou
+  placa.querySelectorAll('.linha').forEach(l => {
+    // mede pelos retângulos dos filhos (a fonte grande tem área interna maior que a linha visível)
+    const ok = () => {
+      const H = l.clientHeight, W = l.clientWidth;
+      let larg = 0, alt = 0;
+      for (const c of l.children) { const r = c.getBoundingClientRect(); larg += r.width; alt = Math.max(alt, r.height); }
+      return alt <= H + 1 && l.scrollWidth <= W + 1;
+    };
+    let s = 1; l.style.fontSize = '1em';
+    while (s > 0.3 && !ok()) { s = Math.round((s - 0.02) * 1000) / 1000; l.style.fontSize = s + 'em'; }
+  });
   placa.querySelectorAll('svg.bc').forEach(svg => {
     if (svg.dataset.ok || !window.JsBarcode) return;
     const code = svg.dataset.code;

@@ -33,6 +33,7 @@
 
 .l-avista .cx-branca { flex: 1 1 0; }
 .l-pack .cx-branca   { flex-basis: 48em; }
+.l-selo .cx-branca, .l-leve .cx-branca { flex-basis: 47em; }
 .l-cb .cx-branca     { flex-basis: 46em; }
 
 /* código de barras */
@@ -42,18 +43,19 @@
 
 /* descrição */
 .placa .desc {
-  flex: 0 0 16em; overflow: hidden; margin-top: 2.6em;
+  flex: 0 0 auto; max-height: 20em; overflow: hidden; margin-top: 2.4em;
   display: flex; flex-direction: column; justify-content: center;
   text-align: center; font-weight: 700; line-height: 1.08; padding: 0 .3em;
 }
-.l-avista .desc { flex-basis: 30em; margin-top: 4em; }
-.l-cb .desc { flex-basis: 14em; }
+.l-avista .desc { max-height: 24em; min-height: 16em; margin-top: 4em; }
+.l-cb .desc { max-height: 17em; }
 .placa .desc .fit, .placa .brinde .fit { overflow: hidden; }
 .placa .desc .ln { white-space: nowrap; }
+.placa .desc .ln.cada { font-size: .7em; font-weight: 800; margin-top: .15em; }
 
 /* linha de preço */
 .placa .linha {
-  flex: 1 1 0; min-height: 0; overflow: hidden;
+  flex: 1 1 0; min-height: 0; overflow: visible;
   display: flex; align-items: center; justify-content: center; font-size: 1em;
 }
 .placa .linha > * { flex-shrink: 0; }
@@ -61,6 +63,19 @@
 .placa .rot .bd { font-weight: 700; font-size: 5.6em; line-height: 1; }
 .placa .rot .lt { font-weight: 300; font-size: 3.4em; line-height: 1.08; }
 .placa .rot .bd + .lt { margin-top: .05em; }
+.placa .rot.cb { margin-right: 2em; }
+.placa .rot .sb { font-weight: 700; font-size: 3.2em; line-height: 1.1; }
+.l-cb .cx-cor .preco.big .int { font-size: 30em; }
+.l-cb .cx-cor .preco.big .cent { font-size: 13.5em; }
+
+/* destaque do preço do kg (hortifruti a cada 100g) */
+.placa .kg {
+  flex: 0 0 auto; align-self: center; white-space: nowrap; overflow: hidden; max-width: 100%;
+  background: #000; color: #fff; border-radius: .6em; padding: .25em .7em; margin: .3em 0 .2em; line-height: 1.15;
+}
+.placa .kg span { font-weight: 700; font-size: .55em; vertical-align: .15em; }
+.placa .kg b { font-weight: 900; }
+.modo-semfundo .kg { background: transparent; color: #000; border: .08em solid #000; }
 
 .placa .preco { display: flex; align-items: flex-end; line-height: 1; }
 .placa .preco .rs  { font-weight: 700; font-size: 3.3em; margin: 0 .5em .5em 0; }
@@ -75,10 +90,10 @@
 .placa .preco.med .int  { font-size: 14em; }
 .placa .preco.med .cent { font-size: 6.8em; }
 .placa .preco.med .un   { font-size: 2.9em; }
-.l-avista .linha.grande .preco .int  { font-size: 30em; }
-.l-avista .linha.grande .preco .cent { font-size: 13.5em; }
-.l-avista .linha.grande .preco .rs   { font-size: 4.4em; }
-.l-avista .linha.grande .preco .un   { font-size: 4.4em; }
+.l-avista .linha.grande .preco .int  { font-size: 40em; }
+.l-avista .linha.grande .preco .cent { font-size: 18em; }
+.l-avista .linha.grande .preco .rs   { font-size: 5em; }
+.l-avista .linha.grande .preco .un   { font-size: 5em; }
 
 /* selo preto (compre e pague, na compra de...) */
 .placa .selo {
@@ -112,9 +127,9 @@
 .placa .rodape.ref { margin-top: auto; }
 .placa .rodape.centro { text-align: center; }
 .placa .rodape.bold { font-weight: 700; }
-.m-clube .cx-cor .rodape { max-width: 70%; }
+.m-clube .cx-cor .rodape { max-width: 74%; }
 
-.placa .mini { position: absolute; right: 2.6em; bottom: 2.2em; width: 22.9em; }
+.placa .mini { position: absolute; right: 2.2em; bottom: 2em; width: 20em; }
 
 /* modos de impressão */
 .placa.modo-semfundo { background: transparent; }
