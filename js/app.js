@@ -257,7 +257,7 @@ $('#form-editor').addEventListener('submit', e => e.preventDefault());
 $('#form-imp').addEventListener('submit', e => e.preventDefault());
 
 const CAMPOS = ['f-modelo', 'f-mecanica', 'f-l1', 'f-l2', 'f-l3', 'f-unidade', 'f-conteudo', 'f-de', 'f-por', 'f-qtd', 'f-pague',
-  'f-pct', 'f-emb', 'f-cashback', 'f-brinde', 'f-ini', 'f-fim', 'f-tamanho', 'f-estoque', 'f-venc', 'f-semfundo'];
+  'f-pct', 'f-emb', 'f-cashback', 'f-brinde', 'f-ini', 'f-fim', 'f-tamanho', 'f-estoque', 'f-venc', 'f-semfundo', 'f-vermelho'];
 CAMPOS.forEach(id => { const el = $('#' + id); el.addEventListener('input', atualizarEditor); el.addEventListener('change', atualizarEditor); });
 
 const PADRAO = { modelo: 'oferta', mecanica: '02', unidade: 'UNIDADE', qtd: 2, pague: 1, pct: 50, embalagem: 'A CAIXA', tamanho: 'A4', semFundo: true };
@@ -291,7 +291,7 @@ function preencher(o) {
   $('#f-brinde').value = o.brindeDesc || ''; $('#f-brinde-busca').value = '';
   $('#f-ini').value = o.dataIni || ''; $('#f-fim').value = o.dataFim || '';
   $('#f-tamanho').value = o.tamanho || 'A4';
-  $('#f-estoque').checked = !!o.enquantoDurar; $('#f-venc').checked = !!o.proxVenc; $('#f-semfundo').checked = !!o.semFundo;
+  $('#f-estoque').checked = !!o.enquantoDurar; $('#f-venc').checked = !!o.proxVenc; $('#f-semfundo').checked = !!o.semFundo; $('#f-vermelho').checked = !!o.precoVermelho;
   $('#f-busca').value = ''; $('#sug-produto').hidden = true;
   // preço do kg: guardado só quando foi alterado à mão
   $('#f-kgde').value = fmtCampo(o.kgDe); $('#f-kgde').dataset.manual = o.kgDe ? '1' : '';
@@ -335,7 +335,7 @@ function lerForm() {
     qtd: parseInt($('#f-qtd').value) || 0, pague: parseInt($('#f-pague').value) || 0, pct: num($('#f-pct').value),
     embalagem: $('#f-emb').value, brindeCod: atual.brindeCod || '', brindeDesc: $('#f-brinde').value.trim().toUpperCase(),
     dataIni: $('#f-ini').value, dataFim: $('#f-fim').value, enquantoDurar: $('#f-estoque').checked,
-    proxVenc: $('#f-venc').checked, tamanho: $('#f-tamanho').value, semFundo: $('#f-semfundo').checked,
+    proxVenc: $('#f-venc').checked, tamanho: $('#f-tamanho').value, semFundo: $('#f-semfundo').checked, precoVermelho: $('#f-vermelho').checked,
     kgDe: $('#f-unidade').value === '100G' && $('#f-kgde').dataset.manual ? num($('#f-kgde').value) : 0,
     kgPor: $('#f-unidade').value === '100G' && $('#f-kgpor').dataset.manual ? num($('#f-kgpor').value) : 0,
   };
@@ -512,7 +512,7 @@ async function salvar() {
 function depoisDeSalvar(o) {
   if ($('#f-manter').checked) {
     abrirEditor({ ...PADRAO, modelo: o.modelo, mecanica: o.mecanica, unidade: o.unidade, qtd: o.qtd, pague: o.pague, pct: o.pct,
-      embalagem: o.embalagem, dataIni: o.dataIni, dataFim: o.dataFim, enquantoDurar: o.enquantoDurar, tamanho: o.tamanho, semFundo: o.semFundo });
+      embalagem: o.embalagem, dataIni: o.dataIni, dataFim: o.dataFim, enquantoDurar: o.enquantoDurar, tamanho: o.tamanho, semFundo: o.semFundo, precoVermelho: o.precoVermelho });
     $('#f-manter').checked = true;
   } else $('#dlg-editor').close();
 }

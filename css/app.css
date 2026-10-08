@@ -173,3 +173,4 @@ label.chk input { width: auto; }
 .prev-modo { margin-top: 10px; font-size: 13px; padding: 9px 11px; border-radius: 8px; line-height: 1.4; }
 .prev-modo.sem { background: #FFF7D6; border: 1.5px solid #E5C200; color: #4A3F00; }
 .prev-modo.com { background: var(--zebra); border: 1.5px solid var(--verde); color: #1F5C3B; }
+label.chk.destaque-chk { font-size: 14px; font-weight: 600; }

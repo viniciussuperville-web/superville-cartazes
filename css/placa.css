@@ -148,3 +148,6 @@
 .placa.l-cb .rot.cb { margin-right: 0; }
 /* sem fundo: desce um pouco a descrição para não encostar no corte da caixa branca da placa pré-impressa */
 .placa.modo-semfundo:not(.l-avista) .desc { margin-top: 3.5em; }
+
+/* opção: preço em vermelho */
+.placa.preco-vermelho .preco { color: #E30613; }
