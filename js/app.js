@@ -260,7 +260,7 @@ const CAMPOS = ['f-modelo', 'f-mecanica', 'f-l1', 'f-l2', 'f-l3', 'f-unidade', '
   'f-pct', 'f-emb', 'f-cashback', 'f-brinde', 'f-ini', 'f-fim', 'f-tamanho', 'f-estoque', 'f-venc', 'f-semfundo', 'f-vermelho'];
 CAMPOS.forEach(id => { const el = $('#' + id); el.addEventListener('input', atualizarEditor); el.addEventListener('change', atualizarEditor); });
 
-const PADRAO = { modelo: 'oferta', mecanica: '02', unidade: 'UNIDADE', qtd: 2, pague: 1, pct: 50, embalagem: 'A CAIXA', tamanho: 'A4', semFundo: true };
+const PADRAO = { modelo: 'oferta', mecanica: '02', unidade: 'UNIDADE', qtd: 2, pague: 1, pct: 50, embalagem: 'A CAIXA', tamanho: 'A4', semFundo: true, precoVermelho: true };
 const fmtCampo = v => 'R$ ' + moeda(num(v) || 0);
 // campos de dinheiro: o encarregado digita só os números e a vírgula entra sozinha (399 → R$ 3,99)
 ['f-de', 'f-por', 'f-cashback', 'f-kgde', 'f-kgpor'].forEach(id => {
@@ -291,7 +291,7 @@ function preencher(o) {
   $('#f-brinde').value = o.brindeDesc || ''; $('#f-brinde-busca').value = '';
   $('#f-ini').value = o.dataIni || ''; $('#f-fim').value = o.dataFim || '';
   $('#f-tamanho').value = o.tamanho || 'A4';
-  $('#f-estoque').checked = !!o.enquantoDurar; $('#f-venc').checked = !!o.proxVenc; $('#f-semfundo').checked = !!o.semFundo; $('#f-vermelho').checked = !!o.precoVermelho;
+  $('#f-estoque').checked = !!o.enquantoDurar; $('#f-venc').checked = !!o.proxVenc; $('#f-semfundo').checked = !!o.semFundo; $('#f-vermelho').checked = o.precoVermelho !== false;
   $('#f-busca').value = ''; $('#sug-produto').hidden = true;
   // preço do kg: guardado só quando foi alterado à mão
   $('#f-kgde').value = fmtCampo(o.kgDe); $('#f-kgde').dataset.manual = o.kgDe ? '1' : '';
