@@ -140,8 +140,8 @@
 
 /* De/Por e cashback: rótulos e "R$" alinhados na mesma coluna (igual às artes do Canva) */
 .l-depor .linha, .l-cb .linha { justify-content: flex-start; padding-left: 0; }
-.l-depor .rot, .l-cb .rot { width: 17em; margin-right: 0; }
-.l-depor .rot .lt, .l-cb .rot .lt { font-size: 3em; }
+.l-depor .rot, .l-cb .rot { width: 15.5em; margin-right: 0; }
+.l-depor .rot .lt, .l-cb .rot .lt { font-size: 2.7em; }
 .l-depor .linha .preco, .l-cb .linha .preco { flex: 1 1 auto; justify-content: center; }
 .l-depor .preco .rs, .l-cb .preco .rs { margin-left: 0; }
 /* hortifruti (100g): descrição maior */
@@ -159,8 +159,8 @@
 /* De/Por: preço De menor, título menor e preço Por maior */
 .l-depor .cx-branca .preco .int  { font-size: 12.5em; }
 .l-depor .cx-branca .preco .cent { font-size: 6em; }
-.l-depor .cx-cor .preco.big .int  { font-size: 40em; }
-.l-depor .cx-cor .preco.big .cent { font-size: 19em; }
+.l-depor .cx-cor .preco.big .int  { font-size: 44em; }
+.l-depor .cx-cor .preco.big .cent { font-size: 20.5em; }
 .l-depor .cx-cor .preco.big .rs { font-size: 4em; }
 /* coluna da unidade (De/Por e cashback): mesma posição nas duas linhas */
 .placa .ucol { width: 14em; flex-shrink: 0; align-self: stretch; display: flex; align-items: flex-end; padding: 0 0 1.2em 0; margin-left: -6em; }

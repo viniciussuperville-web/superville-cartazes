@@ -549,8 +549,9 @@ const copiasDe = o => o.copias || { [o.tamanho || 'A4']: 1 };
 function abrirLote(ctx) {
   // ctx: { tipo: 'sel', itens } ou { tipo: 'lote', lote }
   loteCtx = ctx;
-  const itens = ctx.tipo === 'lote' ? ctx.lote.itens : ctx.itens.map(o => ({ ...o, copias: copiasDe(o) }));
-  loteCtx.itens = itens.map(o => ({ ...o, copias: { ...copiasDe(o) } }));
+  // seleção nova começa zerada: o encarregado escolhe o tamanho e a quantidade; lote salvo abre com o que foi salvo
+  const itens = ctx.tipo === 'lote' ? ctx.lote.itens : ctx.itens.map(o => ({ ...o, copias: {} }));
+  loteCtx.itens = itens.map(o => ({ ...o, copias: { ...(o.copias || {}) } }));
   $('#lote-titulo').textContent = ctx.tipo === 'lote' ? `Lote ${ctx.lote.numero}` : 'Imprimir em lote';
   $('#lote-nome').value = ctx.tipo === 'lote' ? (ctx.lote.nome || '') : '';
   $('#lote-msg').textContent = '';
