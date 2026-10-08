@@ -157,8 +157,8 @@
 .placa.preco-vermelho.l-avista .preco .rs, .placa.preco-vermelho.l-avista .preco .int, .placa.preco-vermelho.l-avista .preco .cent { color: #E30613; }
 
 /* De/Por: preço De menor, título menor e preço Por maior */
-.l-depor .cx-branca .preco .int  { font-size: 12em; }
-.l-depor .cx-branca .preco .cent { font-size: 5.8em; }
+.l-depor .cx-branca .preco .int  { font-size: 14em; }
+.l-depor .cx-branca .preco .cent { font-size: 6.7em; }
 .l-depor .cx-cor .preco.big .int  { font-size: 36em; }
 .l-depor .cx-cor .preco.big .cent { font-size: 17em; }
 .l-depor .cx-cor .preco.big .rs { font-size: 4em; }
