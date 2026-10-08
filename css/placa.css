@@ -47,7 +47,7 @@
   display: flex; flex-direction: column; justify-content: center;
   text-align: center; font-weight: 700; line-height: 1.08; padding: 0 .3em;
 }
-.l-avista .desc { max-height: 24em; min-height: 16em; margin-top: 4em; }
+.l-avista .desc { max-height: 24em; min-height: 16em; margin-top: 10em; }
 .l-cb .desc { max-height: 17em; }
 .placa .desc .fit, .placa .brinde .fit { overflow: hidden; }
 .placa .desc .ln { white-space: nowrap; }
@@ -144,5 +144,7 @@
 /* hortifruti (100g): descrição maior */
 .u100 .desc { max-height: 19em; margin-top: 1.6em; }
 .u100.l-depor .cx-branca { flex-basis: 54em; }
-.u100.l-avista .desc { max-height: 28em; }
+.u100.l-avista .desc { max-height: 28em; margin-top: 10em; }
 .placa.l-cb .rot.cb { margin-right: 0; }
+/* sem fundo: desce um pouco a descrição para não encostar no corte da caixa branca da placa pré-impressa */
+.placa.modo-semfundo:not(.l-avista) .desc { margin-top: 3.5em; }
