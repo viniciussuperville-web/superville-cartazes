@@ -261,7 +261,19 @@ const CAMPOS = ['f-modelo', 'f-mecanica', 'f-l1', 'f-l2', 'f-l3', 'f-unidade', '
 CAMPOS.forEach(id => { const el = $('#' + id); el.addEventListener('input', atualizarEditor); el.addEventListener('change', atualizarEditor); });
 
 const PADRAO = { modelo: 'oferta', mecanica: '02', unidade: 'UNIDADE', qtd: 2, pague: 1, pct: 50, embalagem: 'A CAIXA', tamanho: 'A4' };
-const fmtCampo = v => (v === null || v === undefined || v === '' || v === 0) ? '' : moeda(v);
+const fmtCampo = v => 'R$ ' + moeda(num(v) || 0);
+// campos de dinheiro: o encarregado digita só os números e a vírgula entra sozinha (399 → R$ 3,99)
+['f-de', 'f-por', 'f-cashback'].forEach(id => {
+  const el = $('#' + id);
+  el.setAttribute('inputmode', 'numeric');
+  el.addEventListener('input', () => {
+    const d = el.value.replace(/\D/g, '').replace(/^0+/, '').slice(0, 9);
+    el.value = 'R$ ' + moeda((parseInt(d || '0', 10)) / 100);
+    el.setSelectionRange(el.value.length, el.value.length);
+    atualizarEditor();
+  });
+  el.addEventListener('focus', () => setTimeout(() => el.setSelectionRange(el.value.length, el.value.length), 0));
+});
 
 function preencher(o) {
   atual = { codigo: o.codigo || '', barras: o.barras || '', brindeCod: o.brindeCod || '', descBase: o.descBase || '' };

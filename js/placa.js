@@ -34,7 +34,7 @@ export const TAMANHOS = {
 const n = v => {
   if (v === null || v === undefined || v === '') return 0;
   if (typeof v === 'number') return v;
-  return parseFloat(String(v).replace(/\./g, '').replace(',', '.')) || 0;
+  return parseFloat(String(v).replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
 };
 export const num = n;
 const piso2 = v => Math.floor(v * 100 + 1e-6) / 100;
@@ -126,7 +126,7 @@ const ABREV = [
   [/\bPCT\b\.?/g, 'PACOTE'], [/\bGAS\b/g, 'GÁS'], [/\bS[./]\s?GLUTEN\b/g, 'SEM GLÚTEN'], [/\bGLUTEN\b/g, 'GLÚTEN'],
   [/\bS[./]\s?LACTOSE\b/g, 'SEM LACTOSE'], [/\bZ[./]\s?ACUCAR\b/g, 'ZERO AÇÚCAR'], [/\bS[./]\s?ACUCAR\b/g, 'SEM AÇÚCAR'],
   [/\bS\/\s?OSSO\b/g, 'SEM OSSO'], [/\bC\/\s?OSSO\b/g, 'COM OSSO'], [/\bTEMP\b\.?/g, 'TEMPERADO'],
-  [/\bAGUA\b/g, 'ÁGUA'], [/\bMACA\b/g, 'MAÇÃ'],
+  [/\bAGUA\b/g, 'ÁGUA'], [/\bÁGUA MIN\b\.?/g, 'ÁGUA MINERAL'], [/\bMACA\b/g, 'MAÇÃ'],
   [/\bMAMAO\b/g, 'MAMÃO'], [/\bMELAO\b/g, 'MELÃO'], [/\bLIMPADOR\b/g, 'LIMPADOR'], [/\bPROT\b\.?/g, 'PROTEÍNA'],
   [/\bAVELA\b/g, 'AVELÃ'], [/\bPESSEGO\b/g, 'PÊSSEGO'], [/\bMARACUJA\b/g, 'MARACUJÁ'], [/\bACAI\b/g, 'AÇAÍ'],
   [/\bCAMARAO\b/g, 'CAMARÃO'], [/\bSALMAO\b/g, 'SALMÃO'], [/\bLINGUICA\b/g, 'LINGUIÇA'], [/\bFILE\b/g, 'FILÉ'],
@@ -267,14 +267,18 @@ export function htmlPlaca(o, modo = 'fundo') {
 }
 
 // ---------- ajuste automático de tamanho de fonte ----------
-function cabe(el, box) {
+function cabe(el, box, soLargura) {
+  if (el.scrollWidth > el.clientWidth + 1) return false;
+  if (soLargura) return true;
   box = box || el;
-  return el.scrollWidth <= el.clientWidth + 1 && box.scrollHeight <= box.clientHeight + 1 && el.scrollHeight <= el.clientHeight + 1;
+  // tolerância para acentos (Ã, Ç) que passam um pouco da altura da linha
+  const tol = Math.max(3, parseFloat(getComputedStyle(el).fontSize) * 0.12);
+  return box.scrollHeight <= box.clientHeight + tol && el.scrollHeight <= el.clientHeight + tol;
 }
 // el = elemento cuja fonte muda; box = caixa de layout que não pode transbordar
-function encolher(el, max, min, passo = 0.05, box) {
+function encolher(el, max, min, passo = 0.05, box, soLargura = false) {
   let s = max; el.style.fontSize = s + 'em';
-  while (s > min && !cabe(el, box)) { s = Math.round((s - passo) * 1000) / 1000; el.style.fontSize = s + 'em'; }
+  while (s > min && !cabe(el, box, soLargura)) { s = Math.round((s - passo) * 1000) / 1000; el.style.fontSize = s + 'em'; }
 }
 
 export function ajustar(placa) {
@@ -283,10 +287,10 @@ export function ajustar(placa) {
     encolher(d.querySelector('.fit'), max, 2.2, 0.1, d);
   });
   placa.querySelectorAll('.brinde').forEach(d => encolher(d.querySelector('.fit'), 6.4, 2.2, 0.1, d));
-  placa.querySelectorAll('.kg').forEach(t => encolher(t, 4.6, 2.4, 0.05));
-  placa.querySelectorAll('.titulo').forEach(t => encolher(t, t.classList.contains('t1') ? 11 : 6.6, 3, 0.1));
+  placa.querySelectorAll('.kg').forEach(t => encolher(t, 4.6, 2.4, 0.05, null, true));
+  placa.querySelectorAll('.titulo').forEach(t => encolher(t, t.classList.contains('t1') ? 11 : 6.6, 3, 0.1, null, true));
   placa.querySelectorAll('.rodape').forEach(t => encolher(t, t.classList.contains('bold') ? 3.1 : (placa.classList.contains('m-clube') && t.closest('.cx-cor') ? 2.6 : 2.9), 1.6, 0.05));
-  placa.querySelectorAll('.chamada').forEach(t => encolher(t, 4, 2, 0.05));
+  placa.querySelectorAll('.chamada').forEach(t => encolher(t, 4, 2, 0.05, null, true));
   // a linha de preço por último: ocupa o espaço que sobrou
   placa.querySelectorAll('.linha').forEach(l => {
     // mede pelos retângulos dos filhos (a fonte grande tem área interna maior que a linha visível)

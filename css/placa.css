@@ -70,7 +70,7 @@
 
 /* destaque do preço do kg (hortifruti a cada 100g) */
 .placa .kg {
-  flex: 0 0 auto; align-self: center; white-space: nowrap; overflow: hidden; max-width: 100%;
+  flex: 0 0 auto; align-self: center; white-space: nowrap; overflow: visible; max-width: 100%;
   background: #000; color: #fff; border-radius: .6em; padding: .25em .7em; margin: .3em 0 .2em; line-height: 1.15;
 }
 .placa .kg span { font-weight: 700; font-size: .55em; vertical-align: .15em; }
@@ -106,10 +106,10 @@
 
 /* títulos da caixa colorida */
 .placa .titulo {
-  flex: 0 0 auto; text-align: center; font-weight: 900; line-height: 1.02;
-  white-space: nowrap; overflow: hidden; letter-spacing: -.01em;
+  flex: 0 0 auto; text-align: center; font-weight: 900; line-height: 1.05;
+  white-space: nowrap; overflow: visible; letter-spacing: -.01em;
 }
-.placa .chamada { flex: 0 0 auto; text-align: center; font-weight: 700; white-space: nowrap; overflow: hidden; margin-top: .3em; }
+.placa .chamada { flex: 0 0 auto; text-align: center; font-weight: 700; white-space: nowrap; overflow: visible; margin-top: .3em; }
 .placa .clubetag { text-align: center; font-weight: 800; font-size: 3.4em; margin-top: .4em; white-space: nowrap; }
 
 /* leve grátis */
