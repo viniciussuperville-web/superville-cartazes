@@ -292,7 +292,7 @@ export function ajustar(placa) {
   placa.querySelectorAll('.brinde').forEach(d => encolher(d.querySelector('.fit'), 6.4, 2.2, 0.1, d));
   placa.querySelectorAll('.kg').forEach(t => encolher(t, placa.classList.contains('l-avista') ? 4.6 : 4, 2.4, 0.05, null, true));
   const dp = placa.classList.contains('l-depor');
-  placa.querySelectorAll('.titulo').forEach(t => encolher(t, t.classList.contains('t1') ? (dp ? 7.6 : 11) : (dp ? 5.2 : 6.6), 3, 0.1, null, true));
+  placa.querySelectorAll('.titulo').forEach(t => encolher(t, t.classList.contains('t1') ? (dp ? 9.6 : 11) : (dp ? 6 : 6.6), 3, 0.1, null, true));
   placa.querySelectorAll('.rodape').forEach(t => encolher(t, t.classList.contains('bold') ? 3.1 : (placa.classList.contains('m-clube') && t.closest('.cx-cor') ? 2.6 : 2.9), 1.6, 0.05));
   placa.querySelectorAll('.chamada').forEach(t => encolher(t, 4, 2, 0.05, null, true));
   // a linha de preço por último: ocupa o espaço que sobrou
@@ -326,9 +326,11 @@ export function ajustar(placa) {
     l._aplica = aplica;
     return s;
   });
+  // o preço de cima (De / regular) nunca fica proporcionalmente maior que o de baixo (Por / cashback),
+  // mas o de baixo não diminui por causa do de cima
   if (colunas && linhas.length > 1) {
-    const m = Math.min(...escalas);
-    linhas.forEach(l => l._aplica(m));
+    const ult = escalas.length - 1;
+    linhas.forEach((l, i) => { if (i < ult) l._aplica(Math.min(escalas[i], escalas[ult])); });
   }
   placa.querySelectorAll('svg.bc').forEach(svg => {
     if (svg.dataset.ok || !window.JsBarcode) return;
