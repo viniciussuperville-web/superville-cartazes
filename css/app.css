@@ -189,3 +189,9 @@ label.chk.destaque-chk { font-size: 14px; font-weight: 600; }
 @page folhaDeitada { size: A4 landscape; margin: 0; }
 .folha.c1, .folha.c2a6 { page: folhaEmPe; }
 .folha.c2a5 { page: folhaDeitada; }
+
+.imp-tams { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; margin-top: 10px; }
+.imp-tams > span { font-weight: 700; margin-right: 4px; }
+.imp-tams .btn small { font-weight: 500; opacity: .9; }
+.imp-tams .btn.impresso { background: #1F5C3B; }
+.imp-tams .btn.impresso::after { content: ' ✔'; }

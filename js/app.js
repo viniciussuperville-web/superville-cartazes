@@ -554,6 +554,7 @@ function abrirLote(ctx) {
   $('#lote-titulo').textContent = ctx.tipo === 'lote' ? `Lote ${ctx.lote.numero}` : 'Imprimir em lote';
   $('#lote-nome').value = ctx.tipo === 'lote' ? (ctx.lote.nome || '') : '';
   $('#lote-msg').textContent = '';
+  $$('[data-imp]').forEach(b => b.classList.remove('impresso'));
   $('#tab-lote tbody').innerHTML = loteCtx.itens.map((o, i) => `<tr data-i="${i}">
       <td class="desc-col"><b>${esc(descOferta(o))}</b><small>${esc(MODELOS[o.modelo]?.nome || '')} · ${esc(dinamica(o))}</small></td>
       ${TAMS.map(t => `<td class="qtd"><input type="number" min="0" max="99" data-t="${t}" value="${o.copias[t] || 0}"></td>`).join('')}
@@ -581,6 +582,11 @@ function resumoLote() {
   lerCopias();
   const c = contar(loteCtx.itens);
   $('#lote-resumo').innerHTML = `<b>${c.placas}</b> placa(s): A4 <b>${c.tot.A4}</b> · A5 <b>${c.tot.A5}</b> · A6 <b>${c.tot.A6}</b> — <b>${c.folhas}</b> folha(s) A4`;
+  const fol = { A4: c.tot.A4, A5: Math.ceil(c.tot.A5 / 2), A6: Math.ceil(c.tot.A6 / 4) };
+  TAMS.forEach(t => {
+    $('#n-' + t).textContent = c.tot[t] ? `(${c.tot[t]} placa${c.tot[t] > 1 ? 's' : ''} · ${fol[t]} folha${fol[t] > 1 ? 's' : ''})` : '';
+    $(`[data-imp="${t}"]`).disabled = !c.tot[t];
+  });
 }
 $('#tab-lote').addEventListener('input', resumoLote);
 $('#tab-lote').addEventListener('focusin', e => { if (e.target.matches('input')) e.target.select(); });
@@ -615,14 +621,18 @@ $('#btn-lote-salvar').addEventListener('click', async () => {
   carregando(true);
   try { if (await salvarLote()) { toast('Lote salvo.'); $('#dlg-lote').close(); } } finally { carregando(false); }
 });
-$('#btn-lote-imp').addEventListener('click', async () => {
+// um botão por tamanho (cada um vira uma impressão separada) ou tudo de uma vez
+$$('[data-imp]').forEach(b => b.addEventListener('click', async () => {
   carregando(true);
   let itens;
   try { itens = await salvarLote(); } finally { carregando(false); }
   if (!itens) return;
-  $('#dlg-lote').close();
-  imprimir(itens, 'semfundo');
-});
+  const t = b.dataset.imp;
+  const sel = t === 'todos' ? itens : itens.map(o => ({ ...o, copias: o.copias[t] ? { [t]: o.copias[t] } : {} }));
+  imprimir(sel, 'semfundo');
+  if (t === 'todos') $('#dlg-lote').close();
+  else { b.classList.add('impresso'); toast(`Enviado para impressão: ${t}. Depois imprima os outros tamanhos.`); }
+}));
 
 // monta as folhas: primeiro todas as A4, depois A5 (2 por folha, deitada) e A6 (4 por folha).
 // Cada tamanho usa uma "página nomeada" no CSS, então A4 em pé e A5 deitada saem na mesma impressão.
