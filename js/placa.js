@@ -291,7 +291,8 @@ export function ajustar(placa) {
   });
   placa.querySelectorAll('.brinde').forEach(d => encolher(d.querySelector('.fit'), 6.4, 2.2, 0.1, d));
   placa.querySelectorAll('.kg').forEach(t => encolher(t, placa.classList.contains('l-avista') ? 4.6 : 4, 2.4, 0.05, null, true));
-  placa.querySelectorAll('.titulo').forEach(t => encolher(t, t.classList.contains('t1') ? 11 : 6.6, 3, 0.1, null, true));
+  const dp = placa.classList.contains('l-depor');
+  placa.querySelectorAll('.titulo').forEach(t => encolher(t, t.classList.contains('t1') ? (dp ? 8.5 : 11) : (dp ? 5.6 : 6.6), 3, 0.1, null, true));
   placa.querySelectorAll('.rodape').forEach(t => encolher(t, t.classList.contains('bold') ? 3.1 : (placa.classList.contains('m-clube') && t.closest('.cx-cor') ? 2.6 : 2.9), 1.6, 0.05));
   placa.querySelectorAll('.chamada').forEach(t => encolher(t, 4, 2, 0.05, null, true));
   // a linha de preço por último: ocupa o espaço que sobrou
@@ -303,15 +304,13 @@ export function ajustar(placa) {
       for (const c of l.children) { const r = c.getBoundingClientRect(); larg += r.width; alt = Math.max(alt, r.height); }
       return alt <= H + 1 && l.scrollWidth <= W + 1;
     };
-    let s = 1; l.style.fontSize = '1em';
-    while (s > 0.3 && !ok()) { s = Math.round((s - 0.02) * 1000) / 1000; l.style.fontSize = s + 'em'; }
+    // De/Por e cashback: os rótulos ("De:", "Por:") ficam sempre do mesmo tamanho e na mesma coluna,
+    // só o preço muda de escala — por isso o rótulo recebe a escala inversa
+    const fixo = (placa.classList.contains('l-depor') || placa.classList.contains('l-cb')) && l.querySelector('.rot');
+    const aplica = v => { l.style.fontSize = v + 'em'; if (fixo) fixo.style.fontSize = (1 / v) + 'em'; };
+    let s = 1; aplica(1);
+    while (s > 0.3 && !ok()) { s = Math.round((s - 0.02) * 1000) / 1000; aplica(s); }
   });
-  // De/Por (e cashback): as duas linhas usam a mesma escala para "De:" e "Por:" ficarem alinhados
-  if (placa.classList.contains('l-depor') || placa.classList.contains('l-cb')) {
-    const ls = [...placa.querySelectorAll('.linha')];
-    const menor = Math.min(...ls.map(l => parseFloat(l.style.fontSize) || 1));
-    ls.forEach(l => l.style.fontSize = menor + 'em');
-  }
   placa.querySelectorAll('svg.bc').forEach(svg => {
     if (svg.dataset.ok || !window.JsBarcode) return;
     const code = svg.dataset.code;

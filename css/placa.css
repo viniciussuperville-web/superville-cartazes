@@ -153,3 +153,13 @@
 /* R$ e valor do preço "Por" / preço principal em vermelho; a unidade continua preta */
 .placa.preco-vermelho .cx-cor .preco .rs, .placa.preco-vermelho .cx-cor .preco .int, .placa.preco-vermelho .cx-cor .preco .cent,
 .placa.preco-vermelho.l-avista .preco .rs, .placa.preco-vermelho.l-avista .preco .int, .placa.preco-vermelho.l-avista .preco .cent { color: #E30613; }
+
+/* De/Por: preço De menor, título menor e preço Por maior */
+.l-depor .cx-branca { flex-basis: 45em; }
+.u100.l-depor .cx-branca { flex-basis: 50em; }
+.l-depor .cx-branca .preco .int  { font-size: 14em; }
+.l-depor .cx-branca .preco .cent { font-size: 6.8em; }
+.l-depor .cx-branca .preco .un   { font-size: 3em; }
+.l-depor .cx-cor .preco.big .int  { font-size: 33em; }
+.l-depor .cx-cor .preco.big .cent { font-size: 15em; }
+.l-depor .cx-cor .preco.big .rs, .l-depor .cx-cor .preco.big .un { font-size: 4em; }
