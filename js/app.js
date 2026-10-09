@@ -261,6 +261,7 @@ const CAMPOS = ['f-modelo', 'f-mecanica', 'f-l1', 'f-l2', 'f-l3', 'f-unidade', '
   'f-pct', 'f-emb', 'f-cashback', 'f-brinde', 'f-ini', 'f-fim', 'f-tamanho', 'f-estoque', 'f-venc', 'f-semfundo', 'f-vermelho'];
 CAMPOS.forEach(id => { const el = $('#' + id); el.addEventListener('input', atualizarEditor); el.addEventListener('change', atualizarEditor); });
 
+$('#btn-sem-data').addEventListener('click', () => { $('#f-ini').value = ''; $('#f-fim').value = ''; atualizarEditor(); });
 const PADRAO = { modelo: 'oferta', mecanica: '02', unidade: 'UNIDADE', qtd: 2, pague: 1, pct: 50, embalagem: 'A CAIXA', tamanho: 'A4', semFundo: true, precoVermelho: true };
 const fmtCampo = v => 'R$ ' + moeda(num(v) || 0);
 // campos de dinheiro: o encarregado digita só os números e a vírgula entra sozinha (399 → R$ 3,99)
@@ -394,7 +395,8 @@ function abrirEditor(o, duplicar = false) {
   $('#editor-titulo').textContent = editandoId ? 'Editar placa' : duplicar ? 'Duplicar placa' : 'Nova placa';
   $('#editor-msg').textContent = '';
   $('#f-manter').checked = false;
-  preencher(o ? { ...o } : { ...PADRAO });
+  // placa nova já vem com a data de hoje como início; a pessoa só coloca o término (ou apaga)
+  preencher(o ? { ...o } : { ...PADRAO, dataIni: hoje() });
   if (!$('#dlg-editor').open) $('#dlg-editor').showModal();
   atualizarEditor();
   setTimeout(() => $('#f-busca').focus(), 50);
