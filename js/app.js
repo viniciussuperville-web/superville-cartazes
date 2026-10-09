@@ -337,7 +337,7 @@ function lerForm() {
     qtd: parseInt($('#f-qtd').value) || 0, pague: parseInt($('#f-pague').value) || 0, pct: num($('#f-pct').value),
     embalagem: $('#f-emb').value, brindeCod: atual.brindeCod || '', brindeDesc: $('#f-brinde').value.trim().toUpperCase(),
     dataIni: $('#f-ini').value, dataFim: $('#f-fim').value, enquantoDurar: $('#f-estoque').checked,
-    proxVenc: $('#f-venc').checked, tamanho: $('#f-tamanho').value, semFundo: true, precoVermelho: $('#f-vermelho').checked,
+    proxVenc: $('#f-venc').checked, tamanho: $('#f-tamanho').value, semFundo: true, precoVermelho: true,
     kgDe: $('#f-unidade').value === '100G' && $('#f-kgde').dataset.manual ? num($('#f-kgde').value) : 0,
     kgPor: $('#f-unidade').value === '100G' && $('#f-kgpor').dataset.manual ? num($('#f-kgpor').value) : 0,
   };

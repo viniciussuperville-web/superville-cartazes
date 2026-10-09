@@ -261,7 +261,7 @@ export function htmlPlaca(o, modo = 'fundo') {
       rodape([val, venc]);
   }
 
-  return `<div class="placa m-${m} ${layout} modo-${modo}${e100(o) ? ' u100' : ''}${o.precoVermelho !== false ? ' preco-vermelho' : ''}">` +
+  return `<div class="placa m-${m} ${layout} modo-${modo}${e100(o) ? ' u100' : ''} preco-vermelho">` +
     `<img class="hdr" src="${MODELOS[m].hdr}" alt="">` +
     `<div class="corpo"><div class="cx-branca">${branca}</div>` +
     (cor ? `<div class="cx-cor">${cor}${m === 'clube' ? '<img class="mini" src="assets/soumais-mini.png" alt="">' : ''}</div>` : '') +
