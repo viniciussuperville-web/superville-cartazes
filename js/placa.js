@@ -214,7 +214,7 @@ export function htmlPlaca(o, modo = 'fundo') {
       kgHTML(o, r.regular, n(o.kgDe)) + rodape([refOuKg(o, ref, r.regular)], 'ref');
     cor = `<div class="titulo t2 conteudo">CLUBE FIDELIDADE<br>CASHBACK EXCLUSIVO DE:</div>` +
       `<div class="linha conteudo"><div class="rot cb"><span class="sb">Valor do<br>cashback</span></div>${precoHTML(n(o.cashback), un, 'big')}</div>` +
-      rodape([val, 'O cashback EXPIRA em 30 dias após a data da compra', venc], 'centro bold');
+      rodape([val, 'O cashback EXPIRA em 30 dias<br>após a data da compra', venc], 'centro bold');
   } else if (mec === '01') {
     layout = 'l-avista';
     branca = barrasHTML(o) + descHTML(o) +
