@@ -57,6 +57,15 @@ const ERROS = {
 const msgErro = e => ERROS[e?.code] || e?.message || 'Erro inesperado.';
 const fontesProntas = Promise.all(['300', '500', '700', '800', '900'].map(w => document.fonts.load(`${w} 20px Montserrat`))).catch(() => {});
 
+// ícones dos botões (desenhados, para aparecerem iguais em qualquer computador)
+const svg = d => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}"/></svg>`;
+const IC = {
+  imp: svg('M7 3h10v5H7zM5 9h14a2 2 0 0 1 2 2v6h-4v4H7v-4H3v-6a2 2 0 0 1 2-2zm4 7v3h6v-3z'),
+  edit: svg('M4 17.3V20h2.7l8.6-8.6-2.7-2.7zM18.7 8a1 1 0 0 0 0-1.4l-1.3-1.3a1 1 0 0 0-1.4 0l-1.2 1.2 2.7 2.7z'),
+  dup: svg('M8 8h11v11H8zM5 5h11v2H7v9H5z'),
+  del: svg('M9 3h6l1 2h4v2H4V5h4zM6 8h12l-1 13H7z'),
+};
+
 // ---------------- Estado ----------------
 let PERFIL = null, LOJAS = [], LOJA = null, OFERTAS = [], LOTES = [];
 let editandoId = null, atual = {}, impCtx = null;
@@ -210,10 +219,10 @@ function renderOfertas() {
       <td class="num">${esc(precoPor(o))}</td>
       <td><span class="vig ${v.c}">${esc(v.t)}</span></td>
       <td class="acoes">
-        <button class="ico imp" data-acao="imp" title="Imprimir">🖨</button>
-        <button class="ico" data-acao="edit" title="Editar">✎</button>
-        <button class="ico" data-acao="dup" title="Duplicar">⧉</button>
-        <button class="ico del" data-acao="del" title="Excluir">🗑</button>
+        <button class="acao imp" data-acao="imp" title="Escolher tamanho e quantidade e imprimir">${IC.imp}Imprimir</button>
+        <button class="acao" data-acao="edit" title="Alterar preço, descrição ou datas">${IC.edit}Editar</button>
+        <button class="acao" data-acao="dup" title="Criar uma placa nova a partir desta">${IC.dup}Duplicar</button>
+        <button class="acao del" data-acao="del" title="Apagar esta oferta">${IC.del}Excluir</button>
       </td></tr>`;
   }).join('');
   $('#ofertas-vazio').hidden = lista.length > 0;
@@ -693,7 +702,7 @@ function renderLotes() {
     <td>${esc(l.tamanho || '')}</td>
     <td>${esc(dataHora(l.criadoEm))}</td>
     <td><small>${esc(l.criadoPor || '')}</small></td>
-    <td class="acoes"><button class="ico imp" data-acao="imp" title="Abrir / reimprimir">🖨</button><button class="ico del" data-acao="del" title="Excluir">🗑</button></td>
+    <td class="acoes"><button class="acao imp" data-acao="imp" title="Abrir o lote para conferir e imprimir de novo">${IC.imp}Reimprimir</button><button class="acao del" data-acao="del" title="Apagar este lote">${IC.del}Excluir</button></td>
   </tr>`).join('');
   $('#lotes-vazio').hidden = lista.length > 0;
 }

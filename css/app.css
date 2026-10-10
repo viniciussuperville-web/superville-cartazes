@@ -200,3 +200,14 @@ label.chk.destaque-chk { font-size: 14px; font-weight: 600; }
 .imp-caixa.impresso { border-color: var(--verde); background: #F3FBF6; }
 .imp-caixa.impresso em::after { content: '  ✔ impresso'; color: var(--verde-esc); }
 @media (max-width: 700px) { .imp-caixas { grid-template-columns: 1fr; } }
+
+/* botões de ação com texto (mais fáceis de entender que só ícone) */
+.acao { display: inline-flex; align-items: center; gap: 5px; border: 1.5px solid #CFCFCF; background: #fff; color: #222;
+  border-radius: 7px; padding: 6px 10px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.acao svg { width: 15px; height: 15px; fill: currentColor; }
+.acao + .acao { margin-left: 5px; }
+.acao:hover { border-color: #222; }
+.acao.imp { background: var(--verde); border-color: var(--verde); color: #fff; }
+.acao.imp:hover { background: var(--verde-esc); border-color: var(--verde-esc); }
+.acao.del { color: var(--vermelho); border-color: #F0C4C4; }
+.acao.del:hover { background: #FDECEC; border-color: var(--vermelho); }
