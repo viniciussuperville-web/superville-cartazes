@@ -192,7 +192,8 @@ function precoHTML(valor, unidade, extra = '') {
 
 function descHTML(o) {
   // 2ª linha = marca do produto: sempre em destaque (maior)
-  const ls = (o.linhas || []).map((s, i) => [String(s || '').trim(), i]).filter(([s]) => s);
+  const ls = (o.linhas || []).map((s, i) => [String(s || '').trim(), i])
+    .filter(([s]) => s && !(e100(o) && /^(A CADA )?100\s?G$/i.test(s))); // "A CADA 100G" já sai automático
   const cada = e100(o) ? `<div class="ln cada">A CADA 100G</div>` : '';
   return `<div class="desc conteudo"><div class="fit">${ls.map(([l, i]) => `<div class="ln${i === 1 ? ' marca' : ''}">${esc(l.toUpperCase())}</div>`).join('')}${cada}</div></div>`;
 }
@@ -353,7 +354,7 @@ export function ajustar(placa) {
       const H = l.clientHeight, W = l.clientWidth;
       let alt = 0;
       const lim = l.getBoundingClientRect().right - (parseFloat(getComputedStyle(l).paddingRight) || 0) + 1;
-      let dir = 0;
+      let dir = -Infinity;
       for (const c of l.children) { const b = c.getBoundingClientRect(); alt = Math.max(alt, b.height); dir = Math.max(dir, b.right); }
       return alt <= H + 1 && l.scrollWidth <= W + 1 && dir <= lim;
     };
