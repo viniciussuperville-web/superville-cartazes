@@ -1,3 +1,4 @@
+import { TIPOS, MARCAS } from './tipos.js';
 // =============================================================
 //  Motor de placas SuperVille: cálculos, textos e renderização
 // =============================================================
@@ -141,17 +142,43 @@ export function humanizar(desc) {
   d = d.replace(/(\d)\s*(ML|L|G|KG|GR)\b/g, '$1$2');
   return d.replace(/\s+/g, ' ').trim();
 }
-// divide em até 3 linhas: tipo / marca / complemento
+// divide em 3 linhas: 1ª o que é o produto / 2ª a marca / 3ª a especificação (sabor, tipo, tamanho...)
+const TAM = /^(\d+([.,]\d+)?(KG|G|GR|GRS|ML|L|LT|M|UN|UNID|CM|MM|W|V|X)?|C\/\d+.*|\d+X\d+.*|\d[\d.,]*[A-Z]{0,4})$/;
+const PAISES = { CHIL: 'CHILENO', ARG: 'ARGENTINO', PORT: 'PORTUGUÊS', ITAL: 'ITALIANO', ESP: 'ESPANHOL', BR: 'BRASILEIRO',
+  FRANC: 'FRANCÊS', FRAN: 'FRANCÊS', FR: 'FRANCÊS', URUG: 'URUGUAIO', AFR: 'SUL-AFRICANO', AUST: 'AUSTRALIANO', AUS: 'AUSTRALIANO',
+  NZ: 'NEOZELANDÊS', USA: 'AMERICANO', ALEM: 'ALEMÃO', ALE: 'ALEMÃO' };
+const COM_PAIS = new Set(['VINHO', 'ESPUM', 'AZEITE', 'CHAMP']);
+const moverTamanho = h => {
+  const m = (' ' + h).match(/\s(\d+(?:[.,]\d+)?(?:KG|G|GR|ML|L|LT|M)|C\/\d+\s?UN)\b/);
+  return m ? ((' ' + h).replace(m[0], '') + ' ' + m[1]).replace(/\s+/g, ' ').trim() : h;
+};
 export function dividirLinhas(desc) {
-  let h = humanizar(desc);
-  // conteúdo (250G, 1,5L, C/2UN...) vai para o fim da descrição
-  const re = /\s(\d+(?:[.,]\d+)?(?:KG|G|GR|ML|L|LT|M)|C\/\d+\s?UN)\b/;
-  const m = (' ' + h).match(re);
-  if (m) h = ((' ' + h).replace(m[0], '') + ' ' + m[1]).trim();
-  const w = h.split(' ').filter(Boolean);
-  if (w.length <= 1) return [w[0] || '', '', ''];
-  if (w.length === 2) return [w[0], w[1], ''];
-  return [w[0], w[1], w.slice(2).join(' ')];
+  let t = String(desc || '').toUpperCase().replace(/\s+/g, ' ').trim().split(' ').filter(Boolean);
+  if (!t.length) return ['', '', ''];
+  if (t[0] === 'VINHO' && t[1] === 'W') t.splice(1, 1);
+  // 1ª linha: tipo do produto (lista TIPOS; "SUCO DE LARANJA" leva o complemento junto)
+  let k = 1;
+  for (const n of [4, 3, 2, 1]) if (t.length > n && TIPOS[t.slice(0, n).join(' ')]) { k = n; break; }
+  let tipo = TIPOS[t.slice(0, k).join(' ')] || humanizar(t.slice(0, k).join(' '));
+  if (k === 1 && t.length > k + 1 && ['DE', 'DO', 'DA', 'P/', 'EM'].includes(t[k]) && !TAM.test(t[k + 1])) {
+    tipo += ' ' + humanizar(t.slice(k, k + 2).join(' ')).replace(/^P\/ /, 'PARA ');
+    k += 2;
+  }
+  let resto = t.slice(k);
+  // vinho/espumante/azeite: país de origem vai para a 1ª linha (VINHO CHILENO)
+  if (COM_PAIS.has(t[0]) && resto.length) {
+    const m = resto[0].match(/^(CHIL|ARG|PORT|ITAL|ESP|BR|FRANC|FRAN|FR|URUG|AFR|AUST|AUS|NZ|USA|ALEM|ALE)(\.|$)(.*)$/);
+    if (m) { tipo += ' ' + PAISES[m[1]]; resto = (m[3] ? [m[3]] : []).concat(resto.slice(1)); }
+  }
+  // 2ª linha: marca (pula o tamanho se vier antes; marcas de várias palavras pela lista MARCAS)
+  const comp = j => MARCAS.has(resto.slice(j, j + 3).join(' ')) ? 3 : MARCAS.has(resto.slice(j, j + 2).join(' ')) ? 2 : 0;
+  let i = 0;
+  if (resto.length > 1 && !comp(0) && TAM.test(resto[0]) && !TAM.test(resto[1])) i = 1;
+  let n = comp(i);
+  if (!n && resto[i] && !TAM.test(resto[i]) && !/^(E|COM|SEM|[CSP]\/.*)$/.test(resto[i])) n = 1;
+  const marca = humanizar(resto.slice(i, i + n).join(' '));
+  const spec = moverTamanho(humanizar(resto.slice(0, i).concat(resto.slice(i + n)).join(' ')));
+  return [tipo, marca, spec];
 }
 
 // ---------- HTML ----------
@@ -164,9 +191,10 @@ function precoHTML(valor, unidade, extra = '') {
 }
 
 function descHTML(o) {
-  const ls = (o.linhas || []).map(s => String(s || '').trim()).filter(Boolean);
+  // 2ª linha = marca do produto: sempre em destaque (maior)
+  const ls = (o.linhas || []).map((s, i) => [String(s || '').trim(), i]).filter(([s]) => s);
   const cada = e100(o) ? `<div class="ln cada">A CADA 100G</div>` : '';
-  return `<div class="desc conteudo"><div class="fit">${ls.map(l => `<div class="ln">${esc(l.toUpperCase())}</div>`).join('')}${cada}</div></div>`;
+  return `<div class="desc conteudo"><div class="fit">${ls.map(([l, i]) => `<div class="ln${i === 1 ? ' marca' : ''}">${esc(l.toUpperCase())}</div>`).join('')}${cada}</div></div>`;
 }
 
 // código de barras/interno não aparece mais na placa (decisão: placa limpa, igual às artes do Canva)

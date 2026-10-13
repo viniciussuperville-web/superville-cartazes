@@ -61,22 +61,22 @@ const V = { dataIni: '2026-10-08', dataFim: '2026-10-18' };
 const GRUPOS = [
   { t: 'Oferta', cor: '#E7110D', sub: 'Placa vermelha "Aqui tem Oferta!", com todas as dinâmicas de promoção.', itens: [
     ['01 · À vista', 'Preço único, área toda branca', { modelo: 'oferta', mecanica: '01', linhas: ['ESPUMANTE NACIONAL', 'TERRA NOVA', 'DEMI SEC E MOSCATEL 750ML'], conteudo: '750ML', unidade: 'CADA', de: 39.99, ...V }],
-    ['02 · De / Por', 'Economia calculada automaticamente', { modelo: 'oferta', mecanica: '02', linhas: ['CAFÉ COFFEE ++ GRÃOS', 'SUL DE MINAS 250G', ''], conteudo: '250G', unidade: 'UNIDADE', de: 37.99, por: 28.99, ...V }],
+    ['02 · De / Por', 'Economia calculada automaticamente', { modelo: 'oferta', mecanica: '02', linhas: ['CAFÉ EM GRÃOS', 'COFFEE ++', 'SUL DE MINAS 250G'], conteudo: '250G', unidade: 'UNIDADE', de: 37.99, por: 28.99, ...V }],
     ['03 · Compre e Pague', 'Preço por unidade calculado', { modelo: 'oferta', mecanica: '03', linhas: ['ÁGUA MINERAL', 'MINALBA', 'SEM GÁS 1,5L'], conteudo: '1,5L', unidade: 'UNIDADE', de: 5.99, qtd: 3, pague: 2, ...V }],
-    ['04 · Na compra de X unidades', 'Preço promocional por unidade', { modelo: 'oferta', mecanica: '04', linhas: ['QUIABO', 'BANDEJA', '200G'], conteudo: '200G', unidade: 'CADA', de: 5.99, por: 4.99, qtd: 2, ...V }],
-    ['05 · A partir de X unidades', 'Preço promocional por unidade', { modelo: 'oferta', mecanica: '05', linhas: ['MORANGO', 'BANDEJA', 'DUAS CAMADAS 250G'], conteudo: '250G', unidade: 'UNIDADE', de: 14.99, por: 9.99, qtd: 3, ...V }],
-    ['06 · Percentual de desconto', 'Desconto na última unidade', { modelo: 'oferta', mecanica: '06', linhas: ['PÃO BELIVE', 'SEM GLÚTEN', 'MULTIGRÃOS 400G'], conteudo: '400G', unidade: 'UNIDADE', de: 27.99, qtd: 2, pct: 50, ...V }],
+    ['04 · Na compra de X unidades', 'Preço promocional por unidade', { modelo: 'oferta', mecanica: '04', linhas: ['QUIABO', '', 'BANDEJA 200G'], conteudo: '200G', unidade: 'CADA', de: 5.99, por: 4.99, qtd: 2, ...V }],
+    ['05 · A partir de X unidades', 'Preço promocional por unidade', { modelo: 'oferta', mecanica: '05', linhas: ['MORANGO', '', 'BANDEJA DUAS CAMADAS 250G'], conteudo: '250G', unidade: 'UNIDADE', de: 14.99, por: 9.99, qtd: 3, ...V }],
+    ['06 · Percentual de desconto', 'Desconto na última unidade', { modelo: 'oferta', mecanica: '06', linhas: ['PÃO SEM GLÚTEN', 'BELIVE', 'MULTIGRÃOS 400G'], conteudo: '400G', unidade: 'UNIDADE', de: 27.99, qtd: 2, pct: 50, ...V }],
     ['07 · Leve grátis', 'Na compra + R$ 0,01 leva outro produto', { modelo: 'oferta', mecanica: '07', linhas: ['ÁGUA MINERAL', 'ACQUA PANNA', '505ML'], conteudo: '505ML', unidade: 'UNIDADE', de: 17.99, qtd: 1, brindeDesc: 'ÁGUA MINERAL PERRIER 200ML COM GÁS', ...V }],
     ['10 · Oferta pack', 'Preço da unidade e total da embalagem', { modelo: 'oferta', mecanica: '10', linhas: ['LEITE', 'NINHO', 'INTEGRAL 1L'], conteudo: '1L', unidade: 'UNIDADE', de: 7.99, qtd: 12, embalagem: 'A CAIXA', enquantoDurar: true }],
   ]},
   { t: 'Clube Fidelidade', cor: '#000', sub: 'Placa preta "Se cadastre e Aproveite!", com QR Code e selo Sou Mais. Aceita as mesmas dinâmicas da Oferta.', itens: [
-    ['02 · De / Por', 'Oferta exclusiva do Clube', { modelo: 'clube', mecanica: '02', linhas: ['SUCO BE BAH', 'UVA INTEGRAL 1,35L', ''], conteudo: '1,35L', unidade: 'UNIDADE', de: 15.99, por: 11.99, ...V }],
+    ['02 · De / Por', 'Oferta exclusiva do Clube', { modelo: 'clube', mecanica: '02', linhas: ['SUCO DE UVA INTEGRAL', 'BE BAH', '1,35L'], conteudo: '1,35L', unidade: 'UNIDADE', de: 15.99, por: 11.99, ...V }],
     ['01 · À vista', 'Preço único do Clube', { modelo: 'clube', mecanica: '01', linhas: ['AZEITE EXTRA VIRGEM', 'GALLO', '500ML'], conteudo: '500ML', unidade: 'UNIDADE', de: 34.99, ...V }],
     ['05 · A partir de X unidades', 'Mesma dinâmica, versão Clube', { modelo: 'clube', mecanica: '05', linhas: ['CERVEJA', 'HEINEKEN', 'LATA 350ML'], conteudo: '350ML', unidade: 'UNIDADE', de: 5.49, por: 4.49, qtd: 6, ...V }],
     ['10 · Oferta pack', 'Total da embalagem', { modelo: 'clube', mecanica: '10', linhas: ['ÁGUA MINERAL', 'MINALBA', 'SEM GÁS 500ML'], conteudo: '500ML', unidade: 'UNIDADE', de: 2.49, qtd: 12, embalagem: 'O FARDO', ...V }],
   ]},
   { t: 'Cashback', cor: '#3BB87E', sub: 'Placa preta e verde "Aqui tem Cashback!", com o valor que o cliente do Clube recebe de volta.', itens: [
-    ['Cashback', 'Preço regular + valor do cashback', { modelo: 'cashback', linhas: ['KIT TAÇA RIEDEL 001', 'MAGNUM C/2UN', ''], conteudo: 'C/2UN', unidade: 'UNIDADE', de: 298.99, cashback: 29.89, ...V }],
+    ['Cashback', 'Preço regular + valor do cashback', { modelo: 'cashback', linhas: ['KIT TAÇA', 'RIEDEL', 'MAGNUM 001 C/2UN'], conteudo: 'C/2UN', unidade: 'UNIDADE', de: 298.99, cashback: 29.89, ...V }],
     ['Cashback', 'Exemplo com produto de mercearia', { modelo: 'cashback', linhas: ['VINHO TINTO', 'CASILLERO DEL DIABLO', 'CABERNET SAUVIGNON 750ML'], conteudo: '750ML', unidade: 'UNIDADE', de: 69.99, cashback: 7.00, ...V }],
   ]},
   { t: 'Hortifruti e balcão (a cada 100g)', cor: '#2E8F5B', sub: 'O encarregado digita o preço de 100g e a placa mostra o preço do kg em destaque (calculado e editável).', itens: [

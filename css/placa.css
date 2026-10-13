@@ -52,6 +52,7 @@
 .l-cb .desc { max-height: 17em; }
 .placa .desc .fit, .placa .brinde .fit { overflow: hidden; }
 .placa .desc .ln { white-space: nowrap; }
+.placa .desc .ln.marca { font-size: 1.55em; font-weight: 900; line-height: 1.02; letter-spacing: -.01em; }
 .placa .desc .ln.cada { font-size: .7em; font-weight: 800; margin-top: .15em; }
 
 /* linha de preço */
