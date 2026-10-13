@@ -173,7 +173,7 @@
 
 /* selo redondo "Economize" (teste) — vermelho, Montserrat */
 .placa .bolinha {
-  position: absolute; right: 1.3em; bottom: 1.3em; width: 15.5em; height: 15.5em; border-radius: 50%;
+  position: absolute; left: 1.3em; bottom: 1.3em; width: 15.5em; height: 15.5em; border-radius: 50%;
   background: #E30613; color: #FEE502; line-height: 1; z-index: 2; /* letras amarelas: é como fica impresso sobre a caixa amarela */
   display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
 }
@@ -182,7 +182,7 @@
 .placa .bolinha .vl small { font-size: .34em; font-weight: 700; margin: .3em .15em 0 0; letter-spacing: 0; }
 .placa .bolinha .vl i { font-style: normal; font-size: .6em; margin-top: .05em; }
 .placa.modo-semfundo .bolinha { background: #E30613; color: #fff; } /* impressão: vermelha cheia, letras na cor do papel */
-/* preços e unidades ficam na posição padrão; a bolinha vai no canto, ao lado do rodapé */
-.placa.com-bolinha .cx-cor .rodape { max-width: 72%; }
-/* abre espaço à direita do preço Por para a unidade ficar ao lado da bolinha */
-.placa.com-bolinha.l-depor .cx-cor .linha { padding-right: 12em; }
+/* bolinha no canto inferior esquerdo: o rodapé começa depois dela */
+.placa.com-bolinha .cx-cor .rodape { padding-left: 17em; white-space: nowrap; }
+/* unidade do preço Por junto com os centavos, em vermelho */
+.placa.com-bolinha .cx-cor .preco .un, .placa.com-bolinha .cx-cor .ucol .un { color: #E30613; font-weight: 700; }
