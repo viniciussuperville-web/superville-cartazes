@@ -129,7 +129,6 @@
 .placa .rodape.ref { margin-top: auto; }
 .placa .rodape.centro { text-align: center; }
 .placa .rodape.bold { font-weight: 700; }
-.m-clube .cx-cor .rodape { max-width: 74%; }
 
 .placa .mini { position: absolute; right: 2.2em; bottom: 2em; width: 20em; }
 
@@ -183,9 +182,7 @@
 .placa .bolinha .vl small { font-size: .34em; font-weight: 700; margin: .3em .15em 0 0; letter-spacing: 0; }
 .placa .bolinha .vl i { font-style: normal; font-size: .6em; margin-top: .05em; }
 .placa.modo-semfundo .bolinha { background: #E30613; color: #fff; } /* impressão: vermelha cheia, letras na cor do papel */
-.placa.com-bolinha.m-clube .bolinha { bottom: 10em; }
-/* De/Por: bolinha no canto inferior direito, ao lado da unidade; as unidades das duas linhas recuam juntas (continuam alinhadas) */
-.placa.com-bolinha.l-depor .ucol { position: relative; left: -10.5em; }
 /* preços e unidades ficam na posição padrão; a bolinha vai no canto, ao lado do rodapé */
 .placa.com-bolinha .cx-cor .rodape { max-width: 72%; }
-.placa.com-bolinha.l-depor.m-clube .ucol { left: -14em; }
+/* abre espaço à direita do preço Por para a unidade ficar ao lado da bolinha */
+.placa.com-bolinha.l-depor .cx-cor .linha { padding-right: 12em; }

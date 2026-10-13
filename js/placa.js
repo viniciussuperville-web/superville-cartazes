@@ -293,7 +293,7 @@ export function htmlPlaca(o, modo = 'fundo') {
   return `<div class="placa m-${m} ${layout} modo-${modo}${e100(o) ? ' u100' : ''}${o.bolinha && r.economia && cor ? ' com-bolinha' : ''} preco-vermelho">` +
     `<img class="hdr" src="${MODELOS[m].hdr}" alt="">` +
     `<div class="corpo"><div class="cx-branca">${branca}</div>` +
-    (cor ? `<div class="cx-cor">${cor}${o.bolinha && r.economia ? bolinhaHTML(r.economia) : ''}${m === 'clube' ? '<img class="mini" src="assets/soumais-mini.png" alt="">' : ''}</div>` : '') +
+    (cor ? `<div class="cx-cor">${cor}${o.bolinha && r.economia ? bolinhaHTML(r.economia) : ''}</div>` : '') +
     `</div></div>`;
 }
 
@@ -376,6 +376,13 @@ export function ajustar(placa) {
     u.style.paddingBottom = '0px';
     const dif = u.getBoundingClientRect().bottom - p.getBoundingClientRect().bottom;
     u.style.paddingBottom = Math.max(0, dif) + 'px';
+    // com o selo Economize: a unidade do preço Por termina alinhada com o último dígito (centavos)
+    const un = u.querySelector('.un'), ct = p.querySelector('.cent');
+    u.style.left = '';
+    if (placa.classList.contains('com-bolinha') && l.closest('.cx-cor') && un && ct) {
+      u.style.position = 'relative';
+      u.style.left = (ct.getBoundingClientRect().right - un.getBoundingClientRect().right) + 'px';
+    }
   });
   placa.querySelectorAll('svg.bc').forEach(svg => {
     if (svg.dataset.ok || !window.JsBarcode) return;
