@@ -175,7 +175,7 @@
 /* selo redondo "Economize" (teste) — vermelho, Montserrat */
 .placa .bolinha {
   position: absolute; right: 1.3em; bottom: 1.3em; width: 15.5em; height: 15.5em; border-radius: 50%;
-  background: #E30613; color: #fff; line-height: 1; z-index: 2;
+  background: #E30613; color: #FEE502; line-height: 1; z-index: 2; /* letras amarelas: é como fica impresso sobre a caixa amarela */
   display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
 }
 .placa .bolinha .ec { font-size: 1.9em; font-weight: 800; letter-spacing: 0; margin-bottom: .2em; }
