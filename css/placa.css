@@ -184,8 +184,8 @@
 .placa .bolinha .vl i { font-style: normal; font-size: .6em; margin-top: .05em; }
 .placa.modo-semfundo .bolinha { background: transparent; color: #000; border: .5em solid #000; }
 .placa.com-bolinha.m-clube .bolinha { bottom: 10em; }
-/* De/Por: a bolinha vai na lateral esquerda, embaixo do "Por:", para não cobrir preço nem unidade */
-.placa.com-bolinha.l-depor .bolinha, .placa.com-bolinha.l-depor.m-clube .bolinha { left: 1.6em; right: auto; bottom: 6.6em; }
+/* De/Por: a bolinha fica na lateral direita, no alto da caixa (ao lado do título), sem cobrir preço nem unidade */
+.placa.com-bolinha.l-depor .bolinha, .placa.com-bolinha.l-depor.m-clube .bolinha { top: 1.2em; bottom: auto; right: 1.3em; }
 /* preços e unidades ficam na posição padrão; a bolinha vai no canto, ao lado do rodapé */
 .placa.com-bolinha .cx-cor .rodape { max-width: 72%; }
-.placa.com-bolinha.l-depor .cx-cor .rot { align-self: flex-start; padding-top: 3em; }
+.placa.com-bolinha.l-depor.m-clube .cx-cor .titulo { margin-right: 12em; }
