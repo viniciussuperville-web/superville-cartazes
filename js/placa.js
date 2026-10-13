@@ -382,6 +382,9 @@ export function ajustar(placa) {
     if (placa.classList.contains('com-bolinha') && l.closest('.cx-cor') && un && ct) {
       u.style.position = 'relative';
       u.style.left = (ct.getBoundingClientRect().right - un.getBoundingClientRect().right) + 'px';
+      // e logo abaixo dos centavos (mais perto do preço)
+      const c = ct.getBoundingClientRect(), sobe = un.getBoundingClientRect().top - (c.bottom + c.height * 0.12);
+      if (sobe > 0) u.style.paddingBottom = (parseFloat(u.style.paddingBottom) || 0) + sobe + 'px';
     }
   });
   placa.querySelectorAll('svg.bc').forEach(svg => {
