@@ -172,18 +172,19 @@
 .l-depor .cx-cor { padding-top: 1em; padding-bottom: 1.1em; }
 .l-depor .cx-cor .titulo { margin-bottom: .2em; }
 
-/* selo redondo "Economize" (teste) */
+/* selo redondo "Economize" (teste) — mesmo padrão dos selos pretos (Compre e Pague, A partir de...) */
 .placa .bolinha {
-  position: absolute; right: 1.4em; bottom: 3.2em; width: 22em; height: 22em; border-radius: 50%;
-  background: #E30613; border: .9em solid #fff; box-shadow: 0 .4em 1em rgba(0,0,0,.3);
-  display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; line-height: 1; z-index: 2;
+  position: absolute; right: 1.6em; bottom: 2.2em; width: 16.5em; height: 16.5em; border-radius: 50%;
+  background: #000; color: #fff; line-height: 1; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
 }
-.placa .bolinha .ec { font-size: 3em; font-weight: 800; font-style: italic; margin-bottom: .15em; }
-.placa .bolinha .vl { font-size: 8.4em; font-weight: 900; letter-spacing: -.04em; display: flex; align-items: flex-start; }
-.placa .bolinha .vl small { font-size: .3em; font-weight: 800; margin: .35em .12em 0 0; letter-spacing: 0; }
-.placa .bolinha .vl i { font-style: normal; font-size: .62em; margin-top: .06em; }
-.placa.modo-semfundo .bolinha { background: transparent; border-color: #000; color: #000; box-shadow: none; }
-.placa.com-bolinha .cx-cor .linha { padding-right: 19em; }
-.placa.com-bolinha.l-depor .cx-cor .linha { padding-right: 22em; }
-.placa.com-bolinha.m-clube .bolinha { bottom: 10.5em; }
-.placa.com-bolinha .cx-cor .rodape { max-width: 70%; }
+.placa .bolinha .ec { font-size: 2.3em; font-weight: 800; letter-spacing: .02em; margin-bottom: .2em; }
+.placa .bolinha .vl { font-size: 6.6em; font-weight: 900; letter-spacing: -.03em; display: flex; align-items: flex-start; }
+.placa .bolinha .vl small { font-size: .34em; font-weight: 700; margin: .3em .15em 0 0; letter-spacing: 0; }
+.placa .bolinha .vl i { font-style: normal; font-size: .6em; margin-top: .05em; }
+.placa.modo-semfundo .bolinha { background: transparent; color: #000; border: .5em solid #000; }
+.placa.com-bolinha.m-clube .bolinha { bottom: 10em; }
+/* abre espaço para a bolinha; no De/Por as duas linhas recuam igual para as unidades ficarem alinhadas */
+.placa.com-bolinha .cx-cor .linha { padding-right: 17em; }
+.placa.com-bolinha.l-depor .linha { padding-right: 17em; }
+.placa.com-bolinha .cx-cor .rodape { max-width: 72%; }

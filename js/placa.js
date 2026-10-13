@@ -299,7 +299,7 @@ export function htmlPlaca(o, modo = 'fundo') {
 // selo redondo "Economize" na lateral da caixa colorida (teste)
 function bolinhaHTML(v) {
   const [i, c] = moeda(v).split(',');
-  return `<div class="bolinha conteudo"><span class="ec">Economize</span><span class="vl"><small>R$</small>${i}<i>,${c}</i></span></div>`;
+  return `<div class="bolinha conteudo"><span class="ec">ECONOMIZE</span><span class="vl"><small>R$</small>${i}<i>,${c}</i></span></div>`;
 }
 
 // ---------- ajuste automático de tamanho de fonte ----------
