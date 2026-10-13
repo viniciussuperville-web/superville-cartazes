@@ -376,14 +376,16 @@ export function ajustar(placa) {
     u.style.paddingBottom = '0px';
     const dif = u.getBoundingClientRect().bottom - p.getBoundingClientRect().bottom;
     u.style.paddingBottom = Math.max(0, dif) + 'px';
-    // com o selo Economize: a unidade do preço Por termina alinhada com o último dígito (centavos)
+    // a unidade fica junto do preço: logo abaixo dos centavos, alinhada com o último dígito
+    // (se for mais larga que os centavos, começa na vírgula e avança para a direita)
     const un = u.querySelector('.un'), ct = p.querySelector('.cent');
     u.style.left = '';
-    if (placa.classList.contains('com-bolinha') && l.closest('.cx-cor') && un && ct) {
+    if (un && ct) {
       u.style.position = 'relative';
-      u.style.left = (ct.getBoundingClientRect().right - un.getBoundingClientRect().right) + 'px';
+      const c0 = ct.getBoundingClientRect(), u0 = un.getBoundingClientRect();
+      u.style.left = (u0.width <= c0.width ? c0.right - u0.right : c0.left - u0.left) + 'px';
       // e logo abaixo dos centavos (mais perto do preço)
-      const c = ct.getBoundingClientRect(), sobe = un.getBoundingClientRect().top - (c.bottom + c.height * 0.12);
+      const c = ct.getBoundingClientRect(), sobe = un.getBoundingClientRect().top - (c.bottom + c.height * 0.22);
       if (sobe > 0) u.style.paddingBottom = (parseFloat(u.style.paddingBottom) || 0) + sobe + 'px';
     }
   });
