@@ -1,0 +1,13 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="css/fonts.css"><link rel="stylesheet" href="css/placa.css">
+<style>body{margin:0;padding:20px;background:#eee;display:flex;gap:24px;font-family:Montserrat}</style></head><body>
+<div id="a"></div><div id="b"></div><div id="c"></div>
+<script type="module">
+import { montar } from './js/placa.js';
+await Promise.all(['300','500','700','800','900'].map(w=>document.fonts.load(`${w} 20px Montserrat`)));
+const V={dataIni:'2026-10-13',dataFim:'2026-10-20',bolinha:true};
+montar(document.getElementById('a'),{modelo:'oferta',mecanica:'02',linhas:['ÁGUA MINERAL','PRATA','COM GÁS 370ML'],conteudo:'370ML',unidade:'CADA',de:3.89,por:3.59,...V},{largura:'420px'});
+montar(document.getElementById('b'),{modelo:'clube',mecanica:'02',linhas:['CERVEJA','HEINEKEN','LATA 350ML'],conteudo:'350ML',unidade:'UNIDADE',de:5.49,por:4.49,...V},{largura:'420px'});
+montar(document.getElementById('c'),{modelo:'oferta',mecanica:'05',linhas:['CAFÉ','3 CORAÇÕES','TRADICIONAL 500G'],conteudo:'500G',unidade:'UNIDADE',de:24.99,por:19.99,qtd:2,...V},{largura:'420px'});
+await Promise.all([...document.images].map(i=>i.complete?1:new Promise(r=>i.onload=i.onerror=r)));
+document.body.dataset.pronto=1;
+</script></body></html>

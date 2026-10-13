@@ -256,7 +256,7 @@ export function htmlPlaca(o, modo = 'fundo') {
       kgHTML(o, r.regular, n(o.kgDe)) + rodape([refOuKg(o, ref, r.regular)], 'ref');
     cor = tituloCor(o) +
       `<div class="linha conteudo"><div class="rot"><span class="bd">Por:</span><span class="lt">Preço com<br>desconto</span></div>${precoHTML(r.promo, un, 'big')}</div>` +
-      kgHTML(o, r.promo, n(o.kgPor)) + rodape([refOuKg(o, ref, r.promo), r.economia ? `Nessa promoção você economiza: R$ ${moeda(r.economia)}` : '', val, venc]);
+      kgHTML(o, r.promo, n(o.kgPor)) + rodape([refOuKg(o, ref, r.promo), r.economia && !o.bolinha ? `Nessa promoção você economiza: R$ ${moeda(r.economia)}` : '', val, venc]);
   } else if (['03', '04', '05', '06'].includes(mec)) {
     layout = 'l-selo';
     branca = barrasHTML(o) + descHTML(o) +
@@ -265,7 +265,7 @@ export function htmlPlaca(o, modo = 'fundo') {
     cor = tituloCor(o) +
       `<div class="chamada conteudo">Nessa promoção a unidade sai por:</div>` +
       `<div class="linha conteudo">${precoHTML(r.promo, un, 'big')}</div>` +
-      rodape([refTexto(ref, r.promo), r.economia ? `Nessa promoção você economiza: R$ ${moeda(r.economia)} por unidade` : '', val, venc]);
+      rodape([refTexto(ref, r.promo), r.economia && !o.bolinha ? `Nessa promoção você economiza: R$ ${moeda(r.economia)} por unidade` : '', val, venc]);
   } else if (mec === '07') {
     layout = 'l-leve';
     const bl = (o.brindeDesc || '').toUpperCase();
@@ -289,11 +289,17 @@ export function htmlPlaca(o, modo = 'fundo') {
       rodape([val, venc]);
   }
 
-  return `<div class="placa m-${m} ${layout} modo-${modo}${e100(o) ? ' u100' : ''} preco-vermelho">` +
+  return `<div class="placa m-${m} ${layout} modo-${modo}${e100(o) ? ' u100' : ''}${o.bolinha && r.economia && cor ? ' com-bolinha' : ''} preco-vermelho">` +
     `<img class="hdr" src="${MODELOS[m].hdr}" alt="">` +
     `<div class="corpo"><div class="cx-branca">${branca}</div>` +
-    (cor ? `<div class="cx-cor">${cor}${m === 'clube' ? '<img class="mini" src="assets/soumais-mini.png" alt="">' : ''}</div>` : '') +
+    (cor ? `<div class="cx-cor">${cor}${o.bolinha && r.economia ? bolinhaHTML(r.economia) : ''}${m === 'clube' ? '<img class="mini" src="assets/soumais-mini.png" alt="">' : ''}</div>` : '') +
     `</div></div>`;
+}
+
+// selo redondo "Economize" na lateral da caixa colorida (teste)
+function bolinhaHTML(v) {
+  const [i, c] = moeda(v).split(',');
+  return `<div class="bolinha conteudo"><span class="ec">Economize</span><span class="vl"><small>R$</small>${i}<i>,${c}</i></span></div>`;
 }
 
 // ---------- ajuste automático de tamanho de fonte ----------
@@ -346,8 +352,10 @@ export function ajustar(placa) {
     const ok = () => {
       const H = l.clientHeight, W = l.clientWidth;
       let alt = 0;
-      for (const c of l.children) alt = Math.max(alt, c.getBoundingClientRect().height);
-      return alt <= H + 1 && l.scrollWidth <= W + 1;
+      const lim = l.getBoundingClientRect().right - (parseFloat(getComputedStyle(l).paddingRight) || 0) + 1;
+      let dir = 0;
+      for (const c of l.children) { const b = c.getBoundingClientRect(); alt = Math.max(alt, b.height); dir = Math.max(dir, b.right); }
+      return alt <= H + 1 && l.scrollWidth <= W + 1 && dir <= lim;
     };
     let s = 1; aplica(1);
     while (s > 0.3 && !ok()) { s = Math.round((s - 0.02) * 1000) / 1000; aplica(s); }
