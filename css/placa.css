@@ -174,17 +174,18 @@
 
 /* selo redondo "Economize" (teste) — mesmo padrão dos selos pretos (Compre e Pague, A partir de...) */
 .placa .bolinha {
-  position: absolute; right: 1.6em; bottom: 2.2em; width: 16.5em; height: 16.5em; border-radius: 50%;
+  position: absolute; right: 1.3em; bottom: 1.3em; width: 13em; height: 13em; border-radius: 50%;
   background: #000; color: #fff; line-height: 1; z-index: 2;
   display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
 }
-.placa .bolinha .ec { font-size: 2em; font-weight: 800; letter-spacing: 0; margin-bottom: .2em; }
-.placa .bolinha .vl { font-size: 6.6em; font-weight: 900; letter-spacing: -.03em; display: flex; align-items: flex-start; }
+.placa .bolinha .ec { font-size: 1.6em; font-weight: 800; letter-spacing: 0; margin-bottom: .2em; }
+.placa .bolinha .vl { font-size: 5.2em; font-weight: 900; letter-spacing: -.03em; display: flex; align-items: flex-start; }
 .placa .bolinha .vl small { font-size: .34em; font-weight: 700; margin: .3em .15em 0 0; letter-spacing: 0; }
 .placa .bolinha .vl i { font-style: normal; font-size: .6em; margin-top: .05em; }
 .placa.modo-semfundo .bolinha { background: transparent; color: #000; border: .5em solid #000; }
 .placa.com-bolinha.m-clube .bolinha { bottom: 10em; }
-/* abre espaço para a bolinha; no De/Por as duas linhas recuam igual para as unidades ficarem alinhadas */
-.placa.com-bolinha .cx-cor .linha { padding-right: 17em; }
-.placa.com-bolinha.l-depor .linha { padding-right: 17em; }
+/* De/Por: a bolinha vai na lateral esquerda, embaixo do "Por:", para não cobrir preço nem unidade */
+.placa.com-bolinha.l-depor .bolinha, .placa.com-bolinha.l-depor.m-clube .bolinha { left: 1.6em; right: auto; bottom: 6.6em; }
+/* preços e unidades ficam na posição padrão; a bolinha vai no canto, ao lado do rodapé */
 .placa.com-bolinha .cx-cor .rodape { max-width: 72%; }
+.placa.com-bolinha.l-depor .cx-cor .rot { align-self: flex-start; padding-top: 3em; }
