@@ -2,20 +2,17 @@
 <style>body{margin:0;padding:20px;background:#ddd;display:flex;gap:28px;font-family:Montserrat}
 figure{margin:0;width:400px} figcaption{font-weight:700;font-size:15px;margin-top:8px} figcaption small{display:block;font-weight:400;font-size:13px;color:#444}
 .papel{background:#fff} .sob{position:relative} .sob .por-cima{position:absolute;inset:0;mix-blend-mode:multiply}
-.cheia .placa.modo-semfundo .bolinha{background:#000;color:#fff;border:0}</style></head><body>
-<figure><div id="a" class="papel"></div><figcaption>1 · Impressão: só contorno<small>Como sai da impressora na folha branca</small></figcaption></figure>
-<figure><div class="sob"><div id="b1"></div><div id="b2" class="por-cima"></div></div><figcaption>1 · Na placa da gráfica<small>Contorno preto sobre o amarelo</small></figcaption></figure>
-<figure><div id="c" class="papel cheia"></div><figcaption>2 · Impressão: bolinha preta cheia<small>Como sai da impressora na folha branca</small></figcaption></figure>
-<figure><div class="sob cheia"><div id="d1"></div><div id="d2" class="por-cima"></div></div><figcaption>2 · Na placa da gráfica<small>Preto cheio; as letras ficam amarelas (cor da placa)</small></figcaption></figure>
+</style></head><body>
+<figure><div id="c" class="papel cheia"></div><figcaption>Impressão: bolinha vermelha<small>Como sai da impressora na folha branca</small></figcaption></figure>
+<figure><div class="sob cheia"><div id="d1"></div><div id="d2" class="por-cima"></div></div><figcaption>Na placa da gráfica<small>Vermelha cheia; as letras ficam na cor da placa (amarelo)</small></figcaption></figure>
 <script type="module">
 import { montar } from './js/placa.js';
 await Promise.all(['300','500','700','800','900'].map(w=>document.fonts.load(`${w} 20px Montserrat`)));
 const o={modelo:'oferta',mecanica:'02',linhas:['ÁGUA MINERAL','PRATA','COM GÁS 370ML'],conteudo:'370ML',unidade:'CADA',de:3.89,por:3.59,dataIni:'2026-10-13',dataFim:'2026-10-20',bolinha:true};
 const L={largura:'400px'};
-montar(a,o,{...L,modo:'semfundo'}); montar(b1,o,L); montar(b2,o,{...L,modo:'semfundo'});
 montar(c,o,{...L,modo:'semfundo'}); montar(d1,o,L); montar(d2,o,{...L,modo:'semfundo'});
 // placa da gráfica: sem os textos (só a arte); por cima, a impressão
-document.querySelectorAll('#b1 .conteudo, #d1 .conteudo, #b1 .bolinha, #d1 .bolinha').forEach(e=>e.style.visibility='hidden');
+document.querySelectorAll('#d1 .conteudo, #d1 .bolinha').forEach(e=>e.style.visibility='hidden');
 await Promise.all([...document.images].map(i=>i.complete?1:new Promise(r=>i.onload=i.onerror=r)));
 document.body.dataset.pronto=1;
 </script></body></html>

@@ -172,20 +172,20 @@
 .l-depor .cx-cor { padding-top: 1em; padding-bottom: 1.1em; }
 .l-depor .cx-cor .titulo { margin-bottom: .2em; }
 
-/* selo redondo "Economize" (teste) — mesmo padrão dos selos pretos (Compre e Pague, A partir de...) */
+/* selo redondo "Economize" (teste) — vermelho, Montserrat */
 .placa .bolinha {
-  position: absolute; right: 1.3em; bottom: 1.3em; width: 13em; height: 13em; border-radius: 50%;
-  background: #000; color: #fff; line-height: 1; z-index: 2;
+  position: absolute; right: 1.3em; bottom: 1.3em; width: 15.5em; height: 15.5em; border-radius: 50%;
+  background: #E30613; color: #fff; line-height: 1; z-index: 2;
   display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
 }
-.placa .bolinha .ec { font-size: 1.6em; font-weight: 800; letter-spacing: 0; margin-bottom: .2em; }
-.placa .bolinha .vl { font-size: 5.2em; font-weight: 900; letter-spacing: -.03em; display: flex; align-items: flex-start; }
+.placa .bolinha .ec { font-size: 1.9em; font-weight: 800; letter-spacing: 0; margin-bottom: .2em; }
+.placa .bolinha .vl { font-size: 6.2em; font-weight: 900; letter-spacing: -.03em; display: flex; align-items: flex-start; }
 .placa .bolinha .vl small { font-size: .34em; font-weight: 700; margin: .3em .15em 0 0; letter-spacing: 0; }
 .placa .bolinha .vl i { font-style: normal; font-size: .6em; margin-top: .05em; }
-.placa.modo-semfundo .bolinha { background: transparent; color: #000; border: .5em solid #000; }
+.placa.modo-semfundo .bolinha { background: #E30613; color: #fff; } /* impressão: vermelha cheia, letras na cor do papel */
 .placa.com-bolinha.m-clube .bolinha { bottom: 10em; }
 /* De/Por: bolinha no canto inferior direito, ao lado da unidade; as unidades das duas linhas recuam juntas (continuam alinhadas) */
-.placa.com-bolinha.l-depor .ucol { position: relative; left: -8.5em; }
+.placa.com-bolinha.l-depor .ucol { position: relative; left: -10.5em; }
 /* preços e unidades ficam na posição padrão; a bolinha vai no canto, ao lado do rodapé */
 .placa.com-bolinha .cx-cor .rodape { max-width: 72%; }
-.placa.com-bolinha.l-depor.m-clube .ucol { left: -13em; }
+.placa.com-bolinha.l-depor.m-clube .ucol { left: -14em; }
