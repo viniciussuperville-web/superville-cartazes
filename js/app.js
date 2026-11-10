@@ -75,6 +75,7 @@ const nomeLoja = id => LOJAS.find(l => l.id === id)?.nome || id || '';
 function mostrar(tela) {
   $('#tela-login').hidden = tela !== 'login';
   $('#tela-app').hidden = tela !== 'app';
+  window.SVPadrao?.pronto();
 }
 
 // ---------------- Login ----------------

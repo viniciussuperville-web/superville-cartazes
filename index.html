@@ -12,18 +12,20 @@
 <script src="vendor/JsBarcode.all.min.js"></script>
 </head>
 <body>
+<script src="sv-padrao/abertura.js" data-app="Cartazes" data-esperar="1"></script>
 
 <!-- ================= LOGIN ================= -->
-<section id="tela-login" class="tela" hidden>
-  <div class="login-faixa"></div>
-  <form id="form-login" class="card login">
-    <div class="login-topo"><img src="assets/logo-sv.png" alt="SuperVille"><div><b>Cartazes</b><span>SuperVille Supermercado</span></div></div>
-    <p class="login-intro">Entre com o e-mail da sua loja para criar e imprimir as placas.</p>
+<section id="tela-login" class="tela sv-login-fundo" hidden>
+  <form id="form-login" class="sv-login">
+    <div class="sv-login-head"><img src="sv-padrao/logo.png" alt="SuperVille Supermercado"><b>Cartazes</b><small>Placas de oferta para imprimir na loja</small></div>
+    <div class="sv-login-body">
+    <p class="sv-aviso">Entre com o e-mail da sua loja.</p>
     <label>E-mail<input type="email" id="login-email" required autocomplete="username"></label>
     <label>Senha<input type="password" id="login-senha" required autocomplete="current-password"></label>
     <button class="btn verde" type="submit">Entrar</button>
-    <button class="link" type="button" id="btn-esqueci">Esqueci minha senha</button>
-    <p class="msg" id="login-msg"></p>
+    <button class="link" type="button" id="btn-esqueci" style="display:block;margin:10px auto 0">Esqueci minha senha</button>
+    <p class="msg" id="login-msg" style="text-align:center;margin-top:6px"></p>
+    </div>
   </form>
   <p class="login-rodape">Sistema de placas de oferta · Vila Romana · Vila Leopoldina · Santo Amaro · Pio XI</p>
 </section>
