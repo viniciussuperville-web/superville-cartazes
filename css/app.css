@@ -211,3 +211,12 @@ label.chk.destaque-chk { font-size: 14px; font-weight: 600; }
 .acao.imp:hover { background: var(--verde-esc); border-color: var(--verde-esc); }
 .acao.del { color: var(--vermelho); border-color: #F0C4C4; }
 .acao.del:hover { background: #FDECEC; border-color: var(--vermelho); }
+
+/* lote: + e − embaixo de cada tamanho (soma/tira 1 em todos os produtos) */
+#tab-lote tfoot td { background: #F4F5F4; border-top: 2px solid #1A1A1A; padding: 8px 6px; }
+#tab-lote tfoot .soma-rot { font-size: 12px; color: #555; }
+#tab-lote .soma { display: inline-flex; gap: 6px; }
+#tab-lote .soma button { width: 30px; height: 30px; border-radius: 50%; border: 0; cursor: pointer; font-size: 18px; font-weight: 800; line-height: 1; color: #fff; background: #3BB072; }
+#tab-lote .soma button[data-d="-1"] { background: #1A1A1A; }
+#tab-lote .soma button:hover { filter: brightness(1.1); }
+#tab-lote .soma button:active { transform: scale(.92); }

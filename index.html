@@ -229,6 +229,11 @@
       <table class="tabela" id="tab-lote">
         <thead><tr><th>Descrição</th><th class="qtd">A4<small>1 por folha</small></th><th class="qtd">A5<small>2 por folha</small></th><th class="qtd">A6<small>4 por folha</small></th></tr></thead>
         <tbody></tbody>
+        <tfoot><tr><td class="soma-rot">Somar ou tirar 1 placa de <b>todos</b> os produtos</td>
+          <td class="qtd"><div class="soma"><button type="button" data-soma="A4" data-d="1" title="+1 A4 em todos">+</button><button type="button" data-soma="A4" data-d="-1" title="−1 A4 em todos">−</button></div></td>
+          <td class="qtd"><div class="soma"><button type="button" data-soma="A5" data-d="1" title="+1 A5 em todos">+</button><button type="button" data-soma="A5" data-d="-1" title="−1 A5 em todos">−</button></div></td>
+          <td class="qtd"><div class="soma"><button type="button" data-soma="A6" data-d="1" title="+1 A6 em todos">+</button><button type="button" data-soma="A6" data-d="-1" title="−1 A6 em todos">−</button></div></td>
+        </tr></tfoot>
       </table>
     </div>
     <p class="lote-resumo" id="lote-resumo"></p>

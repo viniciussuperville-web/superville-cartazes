@@ -603,6 +603,15 @@ function resumoLote() {
   });
 }
 $('#tab-lote').addEventListener('input', resumoLote);
+// botões + e − embaixo de cada tamanho: soma ou tira 1 placa daquele tamanho em todos os produtos do lote
+$('#tab-lote').addEventListener('click', e => {
+  const b = e.target.closest('[data-soma]'); if (!b) return;
+  const d = +b.dataset.d;
+  $$(`#tab-lote tbody input[data-t="${b.dataset.soma}"]`).forEach(inp => {
+    inp.value = Math.max(0, Math.min(99, (parseInt(inp.value) || 0) + d));
+  });
+  resumoLote();
+});
 $('#tab-lote').addEventListener('focusin', e => { if (e.target.matches('input')) e.target.select(); });
 $('#form-lote').addEventListener('submit', e => e.preventDefault());
 
