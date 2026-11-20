@@ -350,7 +350,8 @@ export function ajustar(placa) {
     const aplica = v => {
       l.style.fontSize = v + 'em';
       if (rot) rot.style.fontSize = (1 / v) + 'em';
-      if (ucol) ucol.style.fontSize = (1 / v) + 'em';
+      // preço De: a unidade acompanha o tamanho do preço (fica pequena, como nas placas antigas); no Por fica fixa
+      if (ucol) ucol.style.fontSize = (l.closest('.cx-branca') ? Math.max(0.9 * v, 0.55) / v : 1 / v) + 'em';
     };
     // mede pelos retângulos dos filhos (a fonte grande tem área interna maior que a linha visível)
     const ok = () => {
@@ -400,8 +401,8 @@ export function ajustar(placa) {
       const c = ct.getBoundingClientRect();
       // logo abaixo dos centavos, alinhada com o último dígito; se for mais larga (ex.: 100G), começa na vírgula
       u.style.left = (u0.width <= c0.width ? c0.right - u0.right : c0.left - u0.left) + 'px';
-      // no preço De um respiro maior entre os centavos e a unidade
-      const sobe = un.getBoundingClientRect().top - (c.bottom + c.height * (l.closest('.cx-branca') ? 0.6 : 0.22));
+      // preço De: a unidade fica na base do número (bem afastada dos centavos); preço Por: logo abaixo dos centavos
+      const sobe = l.closest('.cx-branca') ? 0 : un.getBoundingClientRect().top - (c.bottom + c.height * 0.22);
       if (sobe > 0) u.style.paddingBottom = (parseFloat(u.style.paddingBottom) || 0) + sobe + 'px';
     }
   });
