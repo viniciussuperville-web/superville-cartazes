@@ -372,6 +372,17 @@ export function ajustar(placa) {
     const ult = escalas.length - 1;
     linhas.forEach((l, i) => { if (i < ult) l._aplica(Math.min(escalas[i], escalas[ult])); });
   }
+  // preço De centralizado no mesmo eixo do preço Por
+  if (colunas && linhas.length > 1) {
+    const centro = l => { const a = l.querySelector('.int'), b = l.querySelector('.cent'); if (!a || !b) return null;
+      const r1 = a.getBoundingClientRect(), r2 = b.getBoundingClientRect(); return (Math.min(r1.left, r2.left) + Math.max(r1.right, r2.right)) / 2; };
+    const ult = linhas[linhas.length - 1], cPor = centro(ult);
+    linhas.slice(0, -1).forEach(l => {
+      const p = l.querySelector('.preco'); if (!p || cPor == null) return;
+      p.style.position = 'relative'; p.style.left = '0px';
+      const c = centro(l); if (c != null) p.style.left = (cPor - c) + 'px';
+    });
+  }
   // unidade (UNI, 100G) na mesma altura da base do preço
   if (colunas) linhas.forEach(l => {
     const u = l.querySelector('.ucol'), p = l.querySelector('.preco');
@@ -387,16 +398,10 @@ export function ajustar(placa) {
       u.style.position = 'relative';
       const c0 = ct.getBoundingClientRect(), u0 = un.getBoundingClientRect();
       const c = ct.getBoundingClientRect();
-      let sobe;
-      if (l.closest('.cx-branca')) {
-        // preço De: a unidade vai ao lado dos centavos, com respiro, na altura do meio dos centavos
-        u.style.left = (c0.right + c0.height * 0.25 - u0.left) + 'px';
-        sobe = un.getBoundingClientRect().top - (c.top + (c.height - u0.height) / 2);
-      } else {
-        // preço Por: logo abaixo dos centavos, alinhada com o último dígito (centralizada se for mais larga)
-        u.style.left = (u0.width <= c0.width ? c0.right - u0.right : (c0.left + c0.width / 2) - (u0.left + u0.width / 2)) + 'px';
-        sobe = un.getBoundingClientRect().top - (c.bottom + c.height * 0.22);
-      }
+      // logo abaixo dos centavos, alinhada com o último dígito; se for mais larga (ex.: 100G), começa na vírgula
+      u.style.left = (u0.width <= c0.width ? c0.right - u0.right : c0.left - u0.left) + 'px';
+      // no preço De um respiro maior entre os centavos e a unidade
+      const sobe = un.getBoundingClientRect().top - (c.bottom + c.height * (l.closest('.cx-branca') ? 0.6 : 0.22));
       if (sobe > 0) u.style.paddingBottom = (parseFloat(u.style.paddingBottom) || 0) + sobe + 'px';
     }
   });
