@@ -350,8 +350,7 @@ export function ajustar(placa) {
     const aplica = v => {
       l.style.fontSize = v + 'em';
       if (rot) rot.style.fontSize = (1 / v) + 'em';
-      // preço De: a unidade acompanha o tamanho do preço (fica pequena, como nas placas antigas); no Por fica fixa
-      if (ucol) ucol.style.fontSize = (l.closest('.cx-branca') ? Math.max(0.9 * v, 0.55) / v : 1 / v) + 'em';
+      if (ucol) ucol.style.fontSize = (1 / v) + 'em'; // unidade sempre do mesmo tamanho (De e Por iguais)
     };
     // mede pelos retângulos dos filhos (a fonte grande tem área interna maior que a linha visível)
     const ok = () => {
@@ -394,7 +393,7 @@ export function ajustar(placa) {
     // a unidade fica junto do preço: logo abaixo dos centavos, alinhada com o último dígito
     // (se for mais larga que os centavos, começa na vírgula e avança para a direita)
     const un = u.querySelector('.un'), ct = p.querySelector('.cent');
-    u.style.left = '';
+    u.style.left = ''; u.style.top = '';
     if (un && ct) {
       u.style.position = 'relative';
       const c0 = ct.getBoundingClientRect(), u0 = un.getBoundingClientRect();
@@ -402,7 +401,14 @@ export function ajustar(placa) {
       // logo abaixo dos centavos, alinhada com o último dígito; se for mais larga (ex.: 100G), começa na vírgula
       u.style.left = (u0.width <= c0.width ? c0.right - u0.right : c0.left - u0.left) + 'px';
       // preço De: a unidade fica na base do número (bem afastada dos centavos); preço Por: logo abaixo dos centavos
-      const sobe = l.closest('.cx-branca') ? 0 : un.getBoundingClientRect().top - (c.bottom + c.height * 0.22);
+      let sobe = l.closest('.cx-branca') ? 0 : un.getBoundingClientRect().top - (c.bottom + c.height * 0.22);
+      if (l.closest('.cx-branca')) {
+        // garante um respiro entre os centavos e a unidade (desce a unidade um pouco, se precisar)
+        // (medido pela fonte: o topo dos centavos + 1,6× o tamanho da fonte deles)
+        const fc = parseFloat(getComputedStyle(ct).fontSize);
+        const falta = (c.top + fc * 1.6) - un.getBoundingClientRect().top;
+        if (falta > 0) u.style.top = falta + 'px';
+      }
       if (sobe > 0) u.style.paddingBottom = (parseFloat(u.style.paddingBottom) || 0) + sobe + 'px';
     }
   });
