@@ -386,9 +386,17 @@ export function ajustar(placa) {
     if (un && ct) {
       u.style.position = 'relative';
       const c0 = ct.getBoundingClientRect(), u0 = un.getBoundingClientRect();
-      u.style.left = (u0.width <= c0.width ? c0.right - u0.right : c0.left - u0.left) + 'px';
-      // e logo abaixo dos centavos (mais perto do preço)
-      const c = ct.getBoundingClientRect(), sobe = un.getBoundingClientRect().top - (c.bottom + c.height * 0.22);
+      const c = ct.getBoundingClientRect();
+      let sobe;
+      if (l.closest('.cx-branca')) {
+        // preço De: a unidade vai ao lado dos centavos, com respiro, na altura do meio dos centavos
+        u.style.left = (c0.right + c0.height * 0.25 - u0.left) + 'px';
+        sobe = un.getBoundingClientRect().top - (c.top + (c.height - u0.height) / 2);
+      } else {
+        // preço Por: logo abaixo dos centavos, alinhada com o último dígito (centralizada se for mais larga)
+        u.style.left = (u0.width <= c0.width ? c0.right - u0.right : (c0.left + c0.width / 2) - (u0.left + u0.width / 2)) + 'px';
+        sobe = un.getBoundingClientRect().top - (c.bottom + c.height * 0.22);
+      }
       if (sobe > 0) u.style.paddingBottom = (parseFloat(u.style.paddingBottom) || 0) + sobe + 'px';
     }
   });

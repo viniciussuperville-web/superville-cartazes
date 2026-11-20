@@ -33,7 +33,10 @@
 }
 .placa .cx-branca { background: #fff; flex: 0 0 52.9em; padding: 2.2em 2.6em 1.4em; }
 /* tamanho FIXO das caixas, igual às artes do Canva (não muda com a dinâmica — a placa da gráfica é sempre igual) */
-.m-oferta .cx-branca, .m-blackfriday .cx-branca { flex-basis: 52.9em; }
+.m-oferta .cx-branca   { flex-basis: 52.9em; }
+/* Black Friday: arte na proporção 210 x 267 mm — na folha A4 sobram 3 cm em cima para a dobra */
+.placa.m-blackfriday { height: calc(var(--w) * 1.27143); }
+.m-blackfriday .cx-branca { flex-basis: 42em; }
 .m-clube .cx-branca    { flex-basis: 51em; }
 .m-cashback .cx-branca { flex-basis: 45.1em; }
 .placa .cx-cor    { background: var(--box); flex: 1 1 0; min-height: 0; padding: 2.4em 2.6em 2em; }
@@ -161,6 +164,7 @@
 .placa.preco-vermelho.l-avista .preco .rs, .placa.preco-vermelho.l-avista .preco .int, .placa.preco-vermelho.l-avista .preco .cent { color: #E30613; }
 
 /* De/Por: preço De menor, título menor e preço Por maior */
+.l-depor .cx-branca .preco .rs, .l-cb .cx-branca .preco .rs { margin-right: .9em; }
 .l-depor .cx-branca .preco .int  { font-size: 12.5em; }
 .l-depor .cx-branca .preco .cent { font-size: 6em; }
 .l-depor .cx-cor .preco.big .int  { font-size: 44em; }
