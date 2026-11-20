@@ -396,8 +396,13 @@ function atualizarEditor() {
   clearTimeout(prevT);
   prevT = setTimeout(async () => { await fontesProntas; montar($('#preview'), o, { largura: '340px', modo: 'fundo' }); }, 60);
   // a prévia mostra sempre a placa completa; o aviso diz como ela sai na impressão
-  $('#prev-modo').className = 'prev-modo sem';
-  $('#prev-modo').innerHTML = '🖨 Na impressão sai <b>SEM FUNDO</b>: só os textos e preços, para a placa da gráfica.';
+  if (MODELOS[o.modelo]?.comFundo) {
+    $('#prev-modo').className = 'prev-modo com';
+    $('#prev-modo').innerHTML = '🖨 Na impressão sai <b>COM FUNDO</b>: a placa completa, em papel branco.';
+  } else {
+    $('#prev-modo').className = 'prev-modo sem';
+    $('#prev-modo').innerHTML = '🖨 Na impressão sai <b>SEM FUNDO</b>: só os textos e preços, para a placa da gráfica.';
+  }
 }
 
 function abrirEditor(o, duplicar = false) {
@@ -678,7 +683,8 @@ async function imprimir(itens, modo = 'semfundo') {
         for (const o of lista.slice(i, i + T.porFolha)) {
           const slot = document.createElement('div');
           folha.appendChild(slot);
-          montar(slot, o, { largura: T.largura + 'mm', modo });
+          // Black Friday sai sempre com o fundo; as outras, sem fundo (placa da gráfica)
+          montar(slot, o, { largura: T.largura + 'mm', modo: MODELOS[o.modelo]?.comFundo && modo !== 'branco' ? 'fundo' : modo });
         }
       }
     }

@@ -79,6 +79,12 @@ const GRUPOS = [
     ['Cashback', 'Preço regular + valor do cashback', { modelo: 'cashback', linhas: ['KIT TAÇA', 'RIEDEL', 'MAGNUM 001 C/2UN'], conteudo: 'C/2UN', unidade: 'UNIDADE', de: 298.99, cashback: 29.89, ...V }],
     ['Cashback', 'Exemplo com produto de mercearia', { modelo: 'cashback', linhas: ['VINHO TINTO', 'CASILLERO DEL DIABLO', 'CABERNET SAUVIGNON 750ML'], conteudo: '750ML', unidade: 'UNIDADE', de: 69.99, cashback: 7.00, ...V }],
   ]},
+  { t: 'Black Friday', cor: '#1A1A1A', sub: 'Placa preta de tijolos "Black Friday". Aceita todas as dinâmicas e é impressa com o fundo, em papel branco.', itens: [
+    ['02 · De / Por', 'Economia calculada automaticamente', { modelo: 'blackfriday', mecanica: '02', linhas: ['CERVEJA', 'HEINEKEN', 'LATA 350ML'], conteudo: '350ML', unidade: 'UNIDADE', de: 5.49, por: 3.99, ...V }],
+    ['01 · À vista', 'Preço único', { modelo: 'blackfriday', mecanica: '01', linhas: ['AZEITE EXTRA VIRGEM', 'GALLO', '500ML'], conteudo: '500ML', unidade: 'UNIDADE', de: 29.99, ...V }],
+    ['03 · Compre e Pague', 'Preço por unidade calculado', { modelo: 'blackfriday', mecanica: '03', linhas: ['ÁGUA MINERAL', 'MINALBA', 'SEM GÁS 1,5L'], conteudo: '1,5L', unidade: 'UNIDADE', de: 5.99, qtd: 3, pague: 2, ...V }],
+    ['10 · Oferta pack', 'Total da embalagem', { modelo: 'blackfriday', mecanica: '10', linhas: ['LEITE', 'NINHO', 'INTEGRAL 1L'], conteudo: '1L', unidade: 'UNIDADE', de: 6.99, qtd: 12, embalagem: 'A CAIXA', ...V }],
+  ]},
   { t: 'Hortifruti e balcão (a cada 100g)', cor: '#2E8F5B', sub: 'O encarregado digita o preço de 100g e a placa mostra o preço do kg em destaque (calculado e editável).', itens: [
     ['À vista · 100g', 'Preço do kg em destaque', { modelo: 'oferta', mecanica: '01', linhas: ['MANGA', 'PALMER', ''], unidade: '100G', de: 1.29, ...V }],
     ['De / Por · 100g', 'Preço do kg no De e no Por', { modelo: 'oferta', mecanica: '02', linhas: ['UVA', 'THOMPSON', ''], unidade: '100G', de: 3.99, por: 3.49, ...V }],

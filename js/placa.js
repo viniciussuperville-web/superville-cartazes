@@ -7,6 +7,8 @@ export const MODELOS = {
   oferta:   { nome: 'Oferta',            hdr: 'assets/hdr-oferta.png' },
   clube:    { nome: 'Clube Fidelidade',  hdr: 'assets/hdr-clube.png' },
   cashback: { nome: 'Cashback',          hdr: 'assets/hdr-cashback.png' },
+  // Black Friday: impressa COM o fundo (não existe placa pré-impressa da gráfica)
+  blackfriday: { nome: 'Black Friday',   hdr: 'assets/hdr-blackfriday.jpg', fundo: 'assets/bf-fundo.jpg', comFundo: true },
 };
 
 export const MECANICAS = {
@@ -291,6 +293,7 @@ export function htmlPlaca(o, modo = 'fundo') {
   }
 
   return `<div class="placa m-${m} ${layout} modo-${modo}${e100(o) ? ' u100' : ''}${o.bolinha && r.economia && cor ? ' com-bolinha' : ''} preco-vermelho">` +
+    (MODELOS[m].fundo ? `<img class="bg" src="${MODELOS[m].fundo}" alt="">` : '') +
     `<img class="hdr" src="${MODELOS[m].hdr}" alt="">` +
     `<div class="corpo"><div class="cx-branca">${branca}</div>` +
     (cor ? `<div class="cx-cor">${cor}${o.bolinha && r.economia ? bolinhaHTML(r.economia) : ''}</div>` : '') +

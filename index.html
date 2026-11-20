@@ -129,10 +129,11 @@
             <button type="button" data-modelo="oferta"><i class="sw sw-oferta"></i><b>Oferta</b><small>Placa vermelha · PROMOÇÃO</small></button>
             <button type="button" data-modelo="clube"><i class="sw sw-clube"></i><b>Clube Fidelidade</b><small>Placa preta · Sou Mais</small></button>
             <button type="button" data-modelo="cashback"><i class="sw sw-cashback"></i><b>Cashback</b><small>Placa preta e verde</small></button>
+            <button type="button" data-modelo="blackfriday"><i class="sw sw-blackfriday"></i><b>Black Friday</b><small>Imprime com fundo</small></button>
           </div>
           <select id="f-modelo" hidden>
             <option value="oferta">Oferta</option><option value="clube">Clube Fidelidade</option><option value="cashback">Cashback</option>
-          </select>
+          <option value="blackfriday">Black Friday</option></select>
           <label id="w-mecanica">Dinâmica da promoção<select id="f-mecanica"></select></label>
           <p class="dica destaque" id="mec-dica"></p>
         </section>
@@ -224,7 +225,7 @@
   <form method="dialog" id="form-lote" class="form-col">
     <div class="dlg-topo"><h3 id="lote-titulo">Imprimir em lote</h3><button type="button" class="x" data-fechar>&times;</button></div>
     <label>Nome do lote (opcional)<input id="lote-nome" placeholder="Ex.: Tabloide semana 41"></label>
-    <p class="dica">Coloque quantas placas de cada tamanho você quer de cada produto. A impressão sai <b>sem fundo</b>.</p>
+    <p class="dica">Coloque quantas placas de cada tamanho você quer de cada produto. A impressão sai <b>sem fundo</b> (a Black Friday sai <b>com fundo</b>).</p>
     <div class="tabela-wrap lote-wrap">
       <table class="tabela" id="tab-lote">
         <thead><tr><th>Descrição</th><th class="qtd">A4<small>1 por folha</small></th><th class="qtd">A5<small>2 por folha</small></th><th class="qtd">A6<small>4 por folha</small></th></tr></thead>
@@ -258,7 +259,7 @@
     <div class="dlg-topo"><h3 id="imp-titulo">Imprimir</h3><button type="button" class="x" data-fechar>&times;</button></div>
     <p id="imp-info" class="dica"></p>
     <label id="w-imp-modelo">Modelo<select id="imp-modelo">
-      <option value="oferta">Oferta</option><option value="clube">Clube Fidelidade</option><option value="cashback">Cashback</option>
+      <option value="oferta">Oferta</option><option value="clube">Clube Fidelidade</option><option value="cashback">Cashback</option><option value="blackfriday">Black Friday</option>
     </select></label>
     <label>Tamanho<select id="imp-tamanho"></select></label>
     <label id="w-imp-modo">Impressão<select id="imp-modo">

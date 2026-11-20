@@ -220,3 +220,7 @@ label.chk.destaque-chk { font-size: 14px; font-weight: 600; }
 #tab-lote .soma button[data-d="-1"] { background: #1A1A1A; }
 #tab-lote .soma button:hover { filter: brightness(1.1); }
 #tab-lote .soma button:active { transform: scale(.92); }
+
+/* Black Friday */
+.sw-blackfriday { background: linear-gradient(#1A1A1A 0 30%, #fff 30% 62%, #FEE502 62%); border: 3px solid #1A1A1A; }
+.tag.blackfriday { background: #1A1A1A; color: #FEE502; }
