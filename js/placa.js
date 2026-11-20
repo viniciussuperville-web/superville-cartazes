@@ -412,6 +412,18 @@ export function ajustar(placa) {
       if (sobe > 0) u.style.paddingBottom = (parseFloat(u.style.paddingBottom) || 0) + sobe + 'px';
     }
   });
+  // unidades do De e do Por na mesma linha vertical (alinhadas pela unidade do Por)
+  if (colunas && linhas.length > 1) {
+    const uPor = linhas[linhas.length - 1].querySelector('.ucol .un');
+    if (uPor) {
+      const x = uPor.getBoundingClientRect().right;
+      linhas.slice(0, -1).forEach(l => {
+        const u = l.querySelector('.ucol'), un = u && u.querySelector('.un');
+        if (!un) return;
+        u.style.left = ((parseFloat(u.style.left) || 0) + x - un.getBoundingClientRect().right) + 'px';
+      });
+    }
+  }
   placa.querySelectorAll('svg.bc').forEach(svg => {
     if (svg.dataset.ok || !window.JsBarcode) return;
     const code = svg.dataset.code;
