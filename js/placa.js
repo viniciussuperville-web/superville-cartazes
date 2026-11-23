@@ -441,9 +441,10 @@ function eanOk(c) {
 }
 
 // cria a placa num container, com largura em mm ou px
-export function montar(container, o, { largura = '210mm', modo = 'fundo' } = {}) {
+export function montar(container, o, { largura = '210mm', modo = 'fundo', tamanho = '' } = {}) {
   container.innerHTML = htmlPlaca(o, modo);
   const el = container.firstElementChild;
+  if (tamanho) el.classList.add('t-' + tamanho); // impressão: ajustes de posição por tamanho (placa da gráfica)
   el.style.setProperty('--w', largura);
   ajustar(el);
   return el;

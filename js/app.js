@@ -684,7 +684,7 @@ async function imprimir(itens, modo = 'semfundo') {
           const slot = document.createElement('div');
           folha.appendChild(slot);
           // Black Friday sai sempre com o fundo; as outras, sem fundo (placa da gráfica)
-          montar(slot, o, { largura: T.largura + 'mm', modo: MODELOS[o.modelo]?.comFundo && modo !== 'branco' ? 'fundo' : modo });
+          montar(slot, o, { largura: T.largura + 'mm', tamanho: t, modo: MODELOS[o.modelo]?.comFundo && modo !== 'branco' ? 'fundo' : modo });
         }
       }
     }

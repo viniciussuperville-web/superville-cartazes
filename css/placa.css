@@ -156,7 +156,18 @@
 .u100.l-avista .desc { max-height: 28em; margin-top: 10em; }
 .placa.l-cb .rot.cb { margin-right: 0; }
 /* sem fundo: desce um pouco a descrição para não encostar no corte da caixa branca da placa pré-impressa */
-.placa.modo-semfundo:not(.l-avista) .desc { margin-top: 3.5em; }
+.placa.modo-semfundo:not(.l-avista) .desc { margin-top: calc(3.5em + var(--desce, 0mm)); }
+/* placa da gráfica (com área de dobra): a impressão começa mais abaixo e os títulos entram na tarja amarela
+   A4: descrição a partir de 8,5 cm do topo · A5: a partir de 7 cm */
+.placa.modo-semfundo.t-A4 { --desce: 7mm; --desce-cor: 11mm; }
+.placa.modo-semfundo.t-A5 { --desce: 15mm; --desce-cor: 12mm; }
+.placa.modo-semfundo.t-A5:not(.l-avista) .desc { max-height: 14em; }
+.placa.modo-semfundo.l-avista .desc { margin-top: calc(10em + var(--desce, 0mm)); }
+.placa.modo-semfundo .cx-cor { padding-top: calc(2.4em + var(--desce-cor, 0mm)); }
+.placa.modo-semfundo.l-depor .cx-cor { padding-top: calc(1em + var(--desce-cor, 0mm)); }
+/* impressão: vermelho do preço mais forte (a impressora puxa o vermelho claro para o laranja) */
+.placa.modo-semfundo.preco-vermelho .cx-cor .preco .rs, .placa.modo-semfundo.preco-vermelho .cx-cor .preco .int, .placa.modo-semfundo.preco-vermelho .cx-cor .preco .cent,
+.placa.modo-semfundo.preco-vermelho.l-avista .preco .rs, .placa.modo-semfundo.preco-vermelho.l-avista .preco .int, .placa.modo-semfundo.preco-vermelho.l-avista .preco .cent { color: #C00000; }
 
 /* opção: preço em vermelho */
 /* R$ e valor do preço "Por" / preço principal em vermelho; a unidade continua preta */
